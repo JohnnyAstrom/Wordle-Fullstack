@@ -35,9 +35,8 @@ function App() {
     }
   }
 
-
   return (
-    <div>
+    <div style={{ padding: '2rem' }}>
       <h1>Wordle-spelet</h1>
 
       <button onClick={fetchWord}>Starta nytt spel</button>
@@ -59,16 +58,35 @@ function App() {
           </button>
         </>
       )}
+
       {feedback.length > 0 && (
         <div>
           <h3>Feedback</h3>
-          <ul>
-            {feedback.map((item, index) => (
-              <li key={index}>
-                {item.letter}: {item.result}
-              </li>
-            ))}
-          </ul>
+          <div style={{ display: 'flex', gap: '8px', marginTop: '1rem' }}>
+            {feedback.map((item, index) => {
+              let bgColor = '';
+              if (item.result === 'correct') bgColor = 'green';
+              else if (item.result === 'misplaced') bgColor = 'orange';
+              else if (item.result === 'incorrect') bgColor = 'red';
+
+              return (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: bgColor,
+                    color: 'white',
+                    padding: '10px',
+                    fontWeight: 'bold',
+                    width: '40px',
+                    textAlign: 'center',
+                    borderRadius: '5px',
+                  }}
+                >
+                  {item.letter.toUpperCase()}
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
