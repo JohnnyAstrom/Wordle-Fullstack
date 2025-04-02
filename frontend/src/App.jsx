@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import './App.css';
+import FeedbackRow from '../components/FeedbackRow.jsx';
+import GuessForm from '../components/GuessForm.jsx';
+import GameSetup from '../components/GameSetup.jsx';
 
 function App() {
   const [word, setWord] = useState(null);
@@ -36,57 +40,27 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="app-container">
       <h1>Wordle-spelet</h1>
-
-      <button onClick={fetchWord}>Starta nytt spel</button>
-
+      <GameSetup
+        onStart={fetchWord}
+        wordLength={word?.length}
+      />
       {word && (
         <>
-          <p>Ordets längd: {word.length}</p>
-
-          <input
-            type="text"
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
-            placeholder="Skriv din gissning"
-            maxLength={word.length}
+          <GuessForm
+            guess={guess}
+            setGuess={setGuess}
+            onGuess={handleGuess}
+            wordLength={word.length}
           />
-
-          <button onClick={handleGuess} disabled={!guess || !word}>
-            Gissa
-          </button>
         </>
       )}
 
       {feedback.length > 0 && (
         <div>
           <h3>Feedback</h3>
-          <div style={{ display: 'flex', gap: '8px', marginTop: '1rem' }}>
-            {feedback.map((item, index) => {
-              let bgColor = '';
-              if (item.result === 'correct') bgColor = 'green';
-              else if (item.result === 'misplaced') bgColor = 'orange';
-              else if (item.result === 'incorrect') bgColor = 'red';
-
-              return (
-                <div
-                  key={index}
-                  style={{
-                    backgroundColor: bgColor,
-                    color: 'white',
-                    padding: '10px',
-                    fontWeight: 'bold',
-                    width: '40px',
-                    textAlign: 'center',
-                    borderRadius: '5px',
-                  }}
-                >
-                  {item.letter.toUpperCase()}
-                </div>
-              );
-            })}
-          </div>
+          <FeedbackRow feedback={feedback} />
         </div>
       )}
     </div>
