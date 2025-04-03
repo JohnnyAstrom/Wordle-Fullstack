@@ -3,11 +3,13 @@ import './App.css';
 import FeedbackRow from '../components/FeedbackRow.jsx';
 import GuessForm from '../components/GuessForm.jsx';
 import GameSetup from '../components/GameSetup.jsx';
+import GuessHistory from '../components/GuessHistory.jsx';
 
 function App() {
   const [word, setWord] = useState(null);
   const [guess, setGuess] = useState('');
   const [feedback, setFeedback] = useState([]);
+  const [guessHistory, setGuessHistory] = useState([]);
 
   async function fetchWord() {
     try {
@@ -22,6 +24,8 @@ function App() {
   }
 
   async function handleGuess() {
+    if (!guess) return;
+
     try {
       const response = await fetch('http://localhost:5080/api/game/guess', {
         method: 'POST',
@@ -33,7 +37,17 @@ function App() {
       });
 
       const result = await response.json();
-      setFeedback(result.feedback);
+      const newFeedback = result.feedback;
+
+      const newGuess = { guess, feedback: newFeedback };
+      setGuessHistory([...guessHistory, newGuess]);
+
+      if (newFeedback.every((item) => item.result === 'correct')) {
+        alert('Grattis! Du har gissat rätt ord!');
+      }
+
+      setGuess('');
+
     } catch (error) {
       console.error('Error while sending guess:', error);
     }
@@ -57,10 +71,16 @@ function App() {
         </>
       )}
 
+      {guessHistory.length > 0 && (
+        <GuessHistory 
+          guessHistory={guessHistory} />
+      )}
+
       {feedback.length > 0 && (
         <div>
           <h3>Feedback</h3>
-          <FeedbackRow feedback={feedback} />
+          <FeedbackRow 
+            feedback={feedback} />
         </div>
       )}
     </div>
