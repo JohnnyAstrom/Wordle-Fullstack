@@ -2,3 +2,11 @@
   background-color: black;
   color: white;
 }
+
+.word-length {
+  margin-bottom: 1rem;
+}
+
+.unique-letters {
+  margin-bottom: 1rem;
+}

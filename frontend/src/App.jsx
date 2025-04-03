@@ -13,9 +13,9 @@ function App() {
   const [gameMessage, setGameMessage] = useState('');
   const MAX_GUESSES = 6;
 
-  async function fetchWord(wordLength) {
+  async function fetchWord(wordLength, uniqueLetters) {
     try {
-      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=false`);
+      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=${uniqueLetters}`);
       const data = await response.json();
       setWord(data.word);
       setGuess('')
@@ -70,7 +70,6 @@ function App() {
       <h1>Wordle-spelet</h1>
       <GameSetup
         onStart={fetchWord}
-        wordLength={word?.length}
       />
       {word && (
         <>
