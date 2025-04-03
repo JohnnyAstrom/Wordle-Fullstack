@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import FeedbackRow from '../components/FeedbackRow.jsx';
 import GuessForm from '../components/GuessForm.jsx';
 import GameSetup from '../components/GameSetup.jsx';
 import GuessHistory from '../components/GuessHistory.jsx';
+import CustomKeyboard from '../components/CustomKeyboard.jsx';
 
 function App() {
   const [word, setWord] = useState(null);
   const [guess, setGuess] = useState('');
-  const [feedback, setFeedback] = useState([]);
   const [guessHistory, setGuessHistory] = useState([]);
   const [gameMessage, setGameMessage] = useState('');
+  const [usedLetters, setUsedLetters] = useState([]);
+  const [keyFeedback, setKeyFeedback] = useState({});
   const MAX_GUESSES = 6;
 
   async function fetchWord(wordLength, uniqueLetters) {
@@ -18,20 +19,20 @@ function App() {
       const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=${uniqueLetters}`);
       const data = await response.json();
       setWord(data.word);
-      setGuess('')
-      setFeedback([]);
+      setGuess('');
       setGuessHistory([]);
       setGameMessage('');
+      setKeyFeedback({});
     } catch (error) {
       console.error('Could not fetch word:', error);
     }
   }
 
   async function handleGuess() {
-    if (!guess) return;
+    if (!guess || guess.length !== word.length) return;
 
     if (guessHistory.length >= MAX_GUESSES) {
-      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}). Spelet är över.`);
+      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}).`);
       return;
     }
 
@@ -51,12 +52,24 @@ function App() {
       const newGuess = { guess, feedback: newFeedback };
       setGuessHistory([...guessHistory, newGuess]);
 
+      const updatedKeyFeedback = { ...keyFeedback };
+      newFeedback.forEach(({ letter, result }) => {
+        const current = updatedKeyFeedback[letter];
+        if (result === 'correct' || (result === 'misplaced' && current !== 'correct')) {
+          updatedKeyFeedback[letter] = result;
+        } else if (!current) {
+          updatedKeyFeedback[letter] = result;
+        }
+      });
+      setKeyFeedback(updatedKeyFeedback);
+
       if (newFeedback.every((item) => item.result === 'correct')) {
-        setGameMessage(`Grattis! Du har gissat rätt ord. Det korrekta ordet var: ${word}`);
+        setGameMessage(`Grattis! Du gissade rätt! Ordet var: ${word}`);
       } else if (guessHistory.length + 1 >= MAX_GUESSES) {
-        setGameMessage(`Du har nått maximala antal gissningar. Det korrekta ordet var: ${word}`)
+        setGameMessage(`Du har förbrukat alla försök. Rätt ord var: ${word}`);
       }
 
+      setUsedLetters([...usedLetters, ...guess.split('')]);
       setGuess('');
 
     } catch (error) {
@@ -65,12 +78,36 @@ function App() {
     }
   }
 
+  const handleKeyPress = (key) => {
+    if (key === 'BACKSPACE') {
+      setGuess((prev) => prev.slice(0, -1));
+    } else if (key === 'ENTER') {
+      handleGuess();
+    } else if (/^[A-ZÅÄÖ]$/.test(key)) {
+      setGuess((prev) => (prev.length < word.length ? prev + key : prev));
+    }
+  };
+
+  useEffect(() => {
+    const handlePhysicalKey = (e) => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      const key = e.key.toUpperCase();
+      if (key === 'BACKSPACE' || key === 'ENTER' || /^[A-ZÅÄÖ]$/.test(key)) {
+        handleKeyPress(key);
+      }
+    };
+    window.addEventListener('keydown', handlePhysicalKey);
+    return () => window.removeEventListener('keydown', handlePhysicalKey);
+  }, [guess, word]);
+
   return (
     <div className="app-container">
       <h1>Wordle-spelet</h1>
-      <GameSetup
-        onStart={fetchWord}
+
+      <GameSetup 
+        onStart={fetchWord} 
       />
+
       {word && (
         <>
           <GuessForm
@@ -79,21 +116,19 @@ function App() {
             onGuess={handleGuess}
             wordLength={word.length}
           />
+          <CustomKeyboard 
+            onKeyPress={handleKeyPress} 
+            keyFeedback={keyFeedback} 
+          />
         </>
       )}
 
       {guessHistory.length > 0 && (
-        <GuessHistory
-          guessHistory={guessHistory} />
+        <GuessHistory 
+          guessHistory={guessHistory} 
+        />
       )}
 
-      {feedback.length > 0 && (
-        <div>
-          <h3>Feedback</h3>
-          <FeedbackRow
-            feedback={feedback} />
-        </div>
-      )}
       {gameMessage && (
         <div className="game-message">
           <p>{gameMessage}</p>

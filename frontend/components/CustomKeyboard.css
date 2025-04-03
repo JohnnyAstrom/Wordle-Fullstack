@@ -1,0 +1,44 @@
+.keyboard-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.keyboard-row:nth-child(2) {
+  margin-left: 1.5rem;
+}
+
+.key {
+  padding: 0.625rem;
+  width: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 0.3125rem;
+  border: none;
+  background-color: lightgray;
+  cursor: pointer;
+  color: white;
+}
+
+.correct {
+  background-color: green;
+}
+
+.misplaced {
+  background-color: orange;
+}
+
+.incorrect {
+  background-color: gray;
+}
+
+.special {
+  width: 4rem;
+  background-color: black;
+}

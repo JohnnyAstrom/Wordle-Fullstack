@@ -11,6 +11,12 @@ function GuessForm({ guess, setGuess, onGuess, wordLength }) {
         placeholder="Skriv din gissning"
         maxLength={wordLength}
         className="guess-input"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onGuess();
+          }
+        }}
       />
 
       <button
@@ -18,7 +24,7 @@ function GuessForm({ guess, setGuess, onGuess, wordLength }) {
         disabled={!guess || !wordLength}
         className="guess-input"
       >
-        Gissa
+        Enter
       </button>
     </div>
   );

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './GameSetup.css';
 
+
 function GameSetup({ onStart }) {
   const [wordLength, setWordLength] = useState(5);
   const [uniqueLetters, setUniqueLetters] = useState(false);
+  const [usedKeys, setUsedKeys] = useState(false);
 
   const handleStart = () => {
     onStart(wordLength, uniqueLetters);

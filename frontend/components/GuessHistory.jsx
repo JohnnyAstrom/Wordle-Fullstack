@@ -1,5 +1,5 @@
 import React from 'react';
-import FeedbackRow from './FeedbackRow';
+import FeedbackRow from './FeedbackRow.jsx';
 
 function GuessHistory({ guessHistory }) {
   return (
