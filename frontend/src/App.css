@@ -1,3 +1,14 @@
 .app-container {
   padding: 2rem;
 }
+
+.game-message {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: pink;
+  color: black;
+  border-radius: 0.25rem;
+  max-width: 21rem;
+}

@@ -1,7 +1,13 @@
 export function getRandomWord(length, uniqueOnly) {
   const wordList = [
     'apple', 'grape', 'peach', 'berry', 'melon',
-    'mango', 'lemon', 'cherry', 'orange', 'banana'
+    'mango', 'lemon', 'spell', 'cloud', 'spare',
+    'beacon', 'candle', 'dancer', 'flight', 'guitar',
+    'hammer', 'jungle', 'kitten', 'ladder', 'market',
+    'balance', 'capture', 'dolphin', 'factory', 'garment',
+    'harbour', 'journey', 'kingdom', 'library', 'morning',
+    'absolute', 'building', 'children', 'delicate', 'elephant',
+    'festival', 'gardener', 'hospital', 'internet', 'jubilant',
   ];
 
   const filteredWords = wordList.filter(word => {

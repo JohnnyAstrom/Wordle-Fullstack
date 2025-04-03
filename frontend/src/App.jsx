@@ -10,14 +10,18 @@ function App() {
   const [guess, setGuess] = useState('');
   const [feedback, setFeedback] = useState([]);
   const [guessHistory, setGuessHistory] = useState([]);
+  const [gameMessage, setGameMessage] = useState('');
+  const MAX_GUESSES = 6;
 
-  async function fetchWord() {
+  async function fetchWord(wordLength) {
     try {
-      const response = await fetch('http://localhost:5080/api/game/start?length=5&unique=false');
+      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=false`);
       const data = await response.json();
       setWord(data.word);
-      setGuess('');
+      setGuess('')
       setFeedback([]);
+      setGuessHistory([]);
+      setGameMessage('');
     } catch (error) {
       console.error('Could not fetch word:', error);
     }
@@ -25,6 +29,11 @@ function App() {
 
   async function handleGuess() {
     if (!guess) return;
+
+    if (guessHistory.length >= MAX_GUESSES) {
+      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}). Spelet är över.`);
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5080/api/game/guess', {
@@ -43,13 +52,16 @@ function App() {
       setGuessHistory([...guessHistory, newGuess]);
 
       if (newFeedback.every((item) => item.result === 'correct')) {
-        alert('Grattis! Du har gissat rätt ord!');
+        setGameMessage(`Grattis! Du har gissat rätt ord. Det korrekta ordet var: ${word}`);
+      } else if (guessHistory.length + 1 >= MAX_GUESSES) {
+        setGameMessage(`Du har nått maximala antal gissningar. Det korrekta ordet var: ${word}`)
       }
 
       setGuess('');
 
     } catch (error) {
       console.error('Error while sending guess:', error);
+      setGameMessage('Ett fel uppstod vid skickandet av din gissning');
     }
   }
 
@@ -72,15 +84,20 @@ function App() {
       )}
 
       {guessHistory.length > 0 && (
-        <GuessHistory 
+        <GuessHistory
           guessHistory={guessHistory} />
       )}
 
       {feedback.length > 0 && (
         <div>
           <h3>Feedback</h3>
-          <FeedbackRow 
+          <FeedbackRow
             feedback={feedback} />
+        </div>
+      )}
+      {gameMessage && (
+        <div className="game-message">
+          <p>{gameMessage}</p>
         </div>
       )}
     </div>
