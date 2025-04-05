@@ -14,7 +14,6 @@ router.post('/guess', (req, res) => {
   }
 
   const feedback = evaluateGuess(guessedWord.toUpperCase(), correctWord.toUpperCase());
-
   res.json({ feedback });
 });
 
@@ -27,17 +26,7 @@ router.get('/start', (req, res) => {
     return res.status(404).json({ error: 'No word found' });
   }
 
-  res.json({ word});
-});
-
-router.get('/highscores', (req, res) => {
-  try {
-    const highscores = getHighscores();
-    res.json(highscores);
-  } catch (error) {
-    console.error('Failed to read highscores:', error);
-    res.status(500).json({ error: 'Failed to read highscores' });
-  }
+  res.json({ word });
 });
 
 router.post('/highscore', (req, res) => {
@@ -51,5 +40,15 @@ router.post('/highscore', (req, res) => {
   res.status(201).json({ message: 'Highscore saved!', entry });
 });
 
+router.get('/highscores', (req, res) => {
+  try {
+    const highscores = getHighscores();
+    highscores.sort((a, b) => a.attempts - b.attempts);
+    res.render('highscores', { highscores });
+  } catch (error) {
+    console.error('Failed to read highscores:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 export default router;

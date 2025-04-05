@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Highscores</title>
+  <link rel="stylesheet" href="/styles/highscores.css" />
+</head>
+<body>
+  <h1>Highscore-lista</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Namn</th>
+        <th>Försök</th>
+        <th>Ordets längd</th>
+        <th>Datum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% highscores.forEach(score => { %>
+        <tr>
+          <td><%= score.name %></td>
+          <td><%= score.attempts %></td>
+          <td><%= score.wordLength %></td>
+          <td><%= new Date(score.date).toLocaleDateString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
