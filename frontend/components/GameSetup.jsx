@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './GameSetup.css';
 
-
 function GameSetup({ onStart }) {
   const [wordLength, setWordLength] = useState(5);
   const [uniqueLetters, setUniqueLetters] = useState(false);
-  const [usedKeys, setUsedKeys] = useState(false);
 
   const handleStart = () => {
     onStart(wordLength, uniqueLetters);
@@ -20,9 +18,7 @@ function GameSetup({ onStart }) {
         onChange={(e) => setWordLength(Number(e.target.value))}
       >
         {[5, 6, 7, 8].map((length) => (
-          <option
-            key={length}
-            value={length}>
+          <option key={length} value={length}>
             {length}
           </option>
         ))}
@@ -38,7 +34,9 @@ function GameSetup({ onStart }) {
         />
       </div>
 
-      <button className="newgame-button" onClick={handleStart}>Starta nytt spel</button>
+      <button type="button" className="newgame-button" onClick={handleStart}>
+        Starta nytt spel
+      </button>
     </div>
   );
 }
