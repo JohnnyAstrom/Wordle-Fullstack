@@ -2,6 +2,7 @@ import express from 'express';
 import { evaluateGuess } from '../logic/evaluateGuess.js';
 import { getRandomWord } from '../logic/getRandomWord.js';
 import { saveHighscore } from '../logic/saveHighscore.js';
+import { getHighscores } from '../logic/getHighscores.js';
 
 const router = express.Router();
 
@@ -29,16 +30,25 @@ router.get('/start', (req, res) => {
   res.json({ word});
 });
 
+router.get('/highscores', (req, res) => {
+  try {
+    const highscores = getHighscores();
+    res.json(highscores);
+  } catch (error) {
+    console.error('Failed to read highscores:', error);
+    res.status(500).json({ error: 'Failed to read highscores' });
+  }
+});
+
 router.post('/highscore', (req, res) => {
   const { name, wordLength, attempts } = req.body;
 
-  if (!name || !wordLength || !attempts) {
-    return res.status(400).json({ error: 'name, wordLength and attempts are required' });
+  if (!name || !attempts || !wordLength) {
+    return res.status(400).json({ error: 'name, attempts and wordLength are required' });
   }
 
-  const newEntry = saveHighscore(name, wordLength, attempts);
-
-  res.status(201).json({ message: 'Highscore accepted!', entry: newEntry });
+  const entry = saveHighscore(name, wordLength, attempts);
+  res.status(201).json({ message: 'Highscore saved!', entry });
 });
 
 
