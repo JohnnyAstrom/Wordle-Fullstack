@@ -1,7 +1,7 @@
 import express from 'express';
 import { evaluateGuess } from '../logic/evaluateGuess.js';
 import { getRandomWord } from '../logic/getRandomWord.js';
-
+import { saveHighscore } from '../logic/saveHighscore.js';
 
 const router = express.Router();
 
@@ -28,5 +28,18 @@ router.get('/start', (req, res) => {
 
   res.json({ word});
 });
+
+router.post('/highscore', (req, res) => {
+  const { name, wordLength, attempts } = req.body;
+
+  if (!name || !wordLength || !attempts) {
+    return res.status(400).json({ error: 'name, wordLength and attempts are required' });
+  }
+
+  const newEntry = saveHighscore(name, wordLength, attempts);
+
+  res.status(201).json({ message: 'Highscore accepted!', entry: newEntry });
+});
+
 
 export default router;
