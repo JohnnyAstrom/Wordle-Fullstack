@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import GameSetup from '../components/GameSetup.jsx';
-import CustomKeyboard from '../components/CustomKeyboard.jsx';
-import Board from '../components/Board.jsx';
+import GameSetup from "../components/GameSetup.jsx";
+import CustomKeyboard from "../components/CustomKeyboard.jsx";
+import Board from "../components/Board.jsx";
 
 function Home() {
   const [word, setWord] = useState(null);
