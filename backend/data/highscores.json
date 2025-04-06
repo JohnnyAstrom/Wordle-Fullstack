@@ -22,5 +22,47 @@
     "wordLength": 5,
     "attempts": 3,
     "date": "2025-04-05T13:56:50.417Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 4,
+    "date": "2025-04-06T13:54:38.566Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 1,
+    "date": "2025-04-06T13:58:11.644Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 1,
+    "date": "2025-04-06T14:00:20.009Z"
+  },
+  {
+    "name": "Johnny Åström",
+    "wordLength": 5,
+    "attempts": 3,
+    "date": "2025-04-06T14:14:03.127Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 1,
+    "date": "2025-04-06T14:17:10.606Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 3,
+    "date": "2025-04-06T14:22:59.587Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 4,
+    "date": "2025-04-06T14:30:42.591Z"
   }
 ]
