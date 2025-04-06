@@ -1,11 +1,17 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home.jsx';
+import Navbar from '../components/Navbar';
+import Home from './Home';
+import About from './About';
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        {/* Highscore länkas just nu som en extern länk i Navbar */}
       </Routes>
     </Router>
   );
