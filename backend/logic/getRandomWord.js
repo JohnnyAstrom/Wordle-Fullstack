@@ -1,15 +1,11 @@
-export function getRandomWord(length, uniqueOnly) {
-  const wordList = [
-    'apple', 'grape', 'peach', 'berry', 'melon',
-    'mango', 'lemon', 'spell', 'cloud', 'spare',
-    'beacon', 'candle', 'dancer', 'flight', 'guitar',
-    'hammer', 'jungle', 'kitten', 'ladder', 'market',
-    'balance', 'capture', 'dolphin', 'factory', 'garment',
-    'harbour', 'journey', 'kingdom', 'library', 'morning',
-    'absolute', 'building', 'children', 'delicate', 'elephant',
-    'festival', 'gardener', 'hospital', 'internet', 'jubilant',
-  ];
+import fs from 'fs';
+import path from 'path';
 
+const wordList = JSON.parse(
+  fs.readFileSync(path.resolve('data/words.json'), 'utf8')
+);
+
+export function getRandomWord(length, uniqueOnly) {
   const filteredWords = wordList.filter(word => {
     if (word.length !== length) return false;
     if (uniqueOnly && hasDuplicates(word)) return false;

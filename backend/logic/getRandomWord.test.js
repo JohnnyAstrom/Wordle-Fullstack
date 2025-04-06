@@ -12,11 +12,20 @@ describe('getRandomWord', () => {
     expect(word).toHaveLength(6);
   });
 
+  it('should return a word with exactly 7 letters', () => {
+    const word = getRandomWord(7, false);
+    expect(word).toHaveLength(7);
+  });
+
+  it('should return a word with exactly 8 letters', () => {
+    const word = getRandomWord(8, false);
+    expect(word).toHaveLength(8);
+  });
+
   it('should return a word with only unique letters', () => {
     const word = getRandomWord(5, true);
     const letters = word.split('');
     const uniqueLetters = new Set(letters);
-
     expect(letters.length).toBe(uniqueLetters.size);
   })
 });
