@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
 import GameSetup from "../components/GameSetup.jsx";
 import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
+import './Home.css';
 
-function Home() {
+function Home({ wordLength, uniqueOnly }) {
   const [word, setWord] = useState(null);
   const [guess, setGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState([]);
@@ -15,11 +15,12 @@ function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+
   const MAX_GUESSES = 6;
 
-  async function fetchWord(wordLength, uniqueLetters) {
+  async function fetchWord() {
     try {
-      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=${uniqueLetters}`);
+      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=${uniqueOnly}`);
       const data = await response.json();
       setWord(data.word);
       setGuess('');
@@ -197,7 +198,7 @@ function Home() {
             </form>
           )}
 
-          {isSubmitted && hasWon && 
+          {isSubmitted && hasWon &&
             <p>Ditt resultat är sparat!</p>}
         </div>
       )}
