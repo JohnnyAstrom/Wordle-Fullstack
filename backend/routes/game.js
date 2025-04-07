@@ -41,14 +41,9 @@ router.post('/highscore', (req, res) => {
 });
 
 router.get('/highscores', (req, res) => {
-  try {
-    const highscores = getHighscores();
-    highscores.sort((a, b) => a.attempts - b.attempts);
-    res.render('highscores', { highscores });
-  } catch (error) {
-    console.error('Failed to read highscores:', error);
-    res.status(500).send('Server error');
-  }
+  const highscores = getHighscores();
+  highscores.sort((a, b) => a.attempts - b.attempts);
+  res.render('highscores', { highscores });
 });
 
 export default router;
