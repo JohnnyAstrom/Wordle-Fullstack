@@ -5,7 +5,6 @@ import Board from "../components/Board.jsx";
 import './Home.css';
 
 function Home({ wordLength, uniqueOnly, timedMode }) {
-  const [word, setWord] = useState(null);
   const [guess, setGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState([]);
   const [gameMessage, setGameMessage] = useState('');
@@ -17,23 +16,31 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
   const [hasWon, setHasWon] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [timeTaken, setTimeTaken] = useState(null);
+  const [gameId, setGameId] = useState(null);
 
   const MAX_GUESSES = 6;
 
   async function fetchWord() {
     try {
-      const response = await fetch(`http://localhost:5080/api/game/start?length=${wordLength}&unique=${uniqueOnly}`);
+      const response = await fetch('http://localhost:5080/api/game/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ length: wordLength, uniqueOnly })
+      });
+
       const data = await response.json();
-      setWord(data.word);
+      if (!response.ok) throw new Error(data.error || 'Kunde inte starta nytt spel');
+
+      setGameId(data.gameId);
       setGuess('');
       setGuessHistory([]);
+      setUsedLetters([]);
       setGameMessage('');
       setKeyFeedback({});
       setPlayerName('');
       setIsSubmitted(false);
       setIsGameOver(false);
       setHasWon(false);
-
       if (timedMode) {
         setStartTime(Date.now());
       } else {
@@ -41,7 +48,61 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       }
       setTimeTaken(null);
     } catch (error) {
-      console.error('Could not fetch word:', error);
+      console.error('Kunde inte starta nytt spel:', error);
+      setGameMessage(error.message);
+    }
+  }
+
+  async function handleGuess() {
+    if (isGameOver || !guess || guess.length !== wordLength) return;
+
+    if (guessHistory.length >= MAX_GUESSES) {
+      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}).`);
+      setIsGameOver(true);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5080/api/game/guess', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId, guessedWord: guess })
+      });
+
+      const result = await response.json();
+      const newFeedback = result.feedback;
+
+      const newGuess = { guess, feedback: newFeedback };
+      const updatedHistory = guessHistory.concat(newGuess);
+      setGuessHistory(updatedHistory);
+
+      const updatedKeyFeedback = { ...keyFeedback };
+      newFeedback.forEach(({ letter, result }) => {
+        const current = updatedKeyFeedback[letter];
+        if (result === 'correct' || (result === 'misplaced' && current !== 'correct')) {
+          updatedKeyFeedback[letter] = result;
+        } else if (!current) {
+          updatedKeyFeedback[letter] = result;
+        }
+      });
+      setKeyFeedback(updatedKeyFeedback);
+
+      if (newFeedback.every((item) => item.result === 'correct')) {
+        setGameMessage(`Du gissade rätt!`);
+        setIsGameOver(true);
+        setHasWon(true);
+        if (timedMode && startTime) setTimeTaken(Math.floor((Date.now() - startTime) / 1000));
+      } else if (updatedHistory.length >= MAX_GUESSES) {
+        setGameMessage(`Du har använt alla försök.`);
+        setIsGameOver(true);
+      }
+
+      const letters = guess.split('');
+      setUsedLetters(usedLetters.concat(letters));
+      setGuess('');
+    } catch (error) {
+      console.error('Error while sending guess:', error);
+      setGameMessage('Ett fel uppstod vid skickandet av din gissning');
     }
   }
 
@@ -54,15 +115,15 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     try {
       const response = await fetch('http://localhost:5080/api/game/highscore', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: playerName,
-          wordLength: word.length,
+          wordLength,
           attempts: guessHistory.length,
           uniqueOnly,
           timedMode,
           time: timedMode ? timeTaken : undefined
-        }),
+        })
       });
 
       if (response.ok) {
@@ -78,82 +139,23 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
   }
 
-  async function handleGuess() {
-    if (isGameOver || !guess || guess.length !== word.length)
-      return;
-
-    if (guessHistory.length >= MAX_GUESSES) {
-      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}).`);
-      setIsGameOver(true);
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5080/api/game/guess', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          guessedWord: guess,
-          correctWord: word
-        }),
-      });
-
-      const result = await response.json();
-      const newFeedback = result.feedback;
-
-      const newGuess = { guess, feedback: newFeedback };
-      setGuessHistory([...guessHistory, newGuess]);
-
-      const updatedKeyFeedback = { ...keyFeedback };
-      newFeedback.forEach(({ letter, result }) => {
-        const current = updatedKeyFeedback[letter];
-        if (result === 'correct' || (result === 'misplaced' && current !== 'correct')) {
-          updatedKeyFeedback[letter] = result;
-        } else if (!current) {
-          updatedKeyFeedback[letter] = result;
-        }
-      });
-      setKeyFeedback(updatedKeyFeedback);
-
-      if (newFeedback.every((item) => item.result === 'correct')) {
-        setGameMessage(`Du gissade rätt! Ordet var: ${word}`);
-        setIsGameOver(true);
-        setHasWon(true);
-
-        if (timedMode && startTime) {
-          const duration = Math.floor((Date.now() - startTime) / 1000);
-          setTimeTaken(duration);
-        }
-      } else if (guessHistory.length + 1 >= MAX_GUESSES) {
-        setGameMessage(`Du har använt alla försök. Rätt ord var: ${word}`);
-        setIsGameOver(true);
-      }
-
-      setUsedLetters([...usedLetters, ...guess.split('')]);
-      setGuess('');
-
-    } catch (error) {
-      console.error('Error while sending guess:', error);
-      setGameMessage('Ett fel uppstod vid skickandet av din gissning');
-    }
-  }
-
   const handleKeyPress = (key) => {
     if (isGameOver) return;
 
     if (key === 'BACKSPACE') {
-      setGuess((prev) => prev.slice(0, -1));
+      setGuess(guess.slice(0, -1));
     } else if (key === 'ENTER') {
       handleGuess();
     } else if (/^[A-ZÅÄÖ]$/.test(key)) {
-      setGuess((prev) => (prev.length < word.length ? prev + key : prev));
+      if (guess.length < wordLength) {
+        setGuess(guess + key);
+      }
     }
   };
 
   useEffect(() => {
     const handlePhysicalKey = (e) => {
       const key = e.key.toUpperCase();
-
       if (document.activeElement.tagName === 'INPUT') return;
 
       if (key === 'ENTER') {
@@ -169,7 +171,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
     window.addEventListener('keydown', handlePhysicalKey);
     return () => window.removeEventListener('keydown', handlePhysicalKey);
-  }, [guess, word, isGameOver]);
+  }, [guess, wordLength, isGameOver]);
 
   return (
     <div className="app-container">
@@ -177,12 +179,12 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
       <GameSetup onStart={fetchWord} />
 
-      {word && (
+      {gameId && (
         <>
           <Board
             guessHistory={guessHistory}
             currentGuess={guess}
-            wordLength={word.length}
+            wordLength={wordLength}
           />
           <CustomKeyboard
             onKeyPress={handleKeyPress}
@@ -217,8 +219,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
             </form>
           )}
 
-          {isSubmitted && hasWon &&
-            <p>Ditt resultat är sparat!</p>}
+          {isSubmitted && hasWon && <p>Ditt resultat är sparat!</p>}
         </div>
       )}
     </div>

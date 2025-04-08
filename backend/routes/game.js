@@ -4,6 +4,7 @@ import { evaluateGuess } from '../logic/evaluateGuess.js';
 import { getRandomWord } from '../logic/getRandomWord.js';
 import { saveHighscore } from '../logic/saveHighscore.js';
 import { getHighscores } from '../logic/getHighscores.js';
+import { createGame } from '../logic/activeGames.js';
 
 const router = express.Router();
 
@@ -19,17 +20,23 @@ router.post('/guess', (req, res) => {
   res.json({ feedback });
 });
 
-// GET /api/game/start
-router.get('/start', (req, res) => {
-  const length = req.query.length ? parseInt(req.query.length) : 5;
-  const uniqueOnly = req.query.unique === 'true';
+// POST /api/game/start
+router.post('/start', (req, res) => {
+  const length = parseInt(req.body.length) || 5;
+  const uniqueOnly = req.body.uniqueOnly === true;
+
   const word = getRandomWord(length, uniqueOnly);
 
   if (!word) {
-    return res.status(404).json({ error: 'Kunde inte hitta något ord med de kriterierna' });
+    return res.status(404).json({ error: 'Kunde inte hitta ett ord med dessa kriterier' });
   }
 
-  res.json({ word });
+  const gameId = createGame(word, uniqueOnly);
+
+  res.status(200).json({
+    gameId,
+    wordLength: word.length
+  });
 });
 
 // POST /api/game/highscore
