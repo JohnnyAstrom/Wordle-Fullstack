@@ -1,8 +1,11 @@
 import request from 'supertest';
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import gameRouter from './game.js';
-import { createGame } from '../logic/activeGames.js';
+import { createGame, endGame } from '../logic/activeGames.js';
+
+const testPath = path.resolve('./data/test-save-highscores.json')
 
 const app = express();
 
@@ -92,9 +95,46 @@ describe('POST /api/game/guess', () => {
   it('should return 400 if required data is missing', async () => {
     const response = await request(app)
       .post('/api/game/guess')
-      .send({ gameId: 'something' }); // saknar guessedWord
+      .send({ gameId: 'something' });
 
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('error');
+  });
+});
+
+describe('POST /api/game/finish', () => {
+  afterEach(() => {
+    if (fs.existsSync(testPath)) {
+      fs.unlinkSync(testPath);
+    }
+  });
+
+  it('should end the game and return highscore entry with time', async () => {
+    const word = 'APPLE';
+    const gameId = createGame(word);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const response = await request(app)
+      .post('/api/game/finish')
+      .send({
+        gameId,
+        name: 'TestUser',
+        attempts: 3,
+        wordLength: word.length,
+        uniqueOnly: true,
+        useTestPath: true
+      });
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toHaveProperty('message', 'Highscore sparat!');
+    expect(response.body.entry).toMatchObject({
+      name: 'TestUser',
+      wordLength: 5,
+      attempts: 3,
+      uniqueOnly: true
+    });
+    expect(typeof response.body.entry.time).toBe('number');
+    expect(response.body.entry.time).toBeGreaterThan(0);
   });
 });

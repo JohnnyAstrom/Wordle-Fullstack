@@ -41,5 +41,21 @@
     "uniqueOnly": false,
     "time": 23,
     "date": "2025-04-08T10:05:46.651Z"
+  },
+  {
+    "name": "Johnny Å",
+    "wordLength": 5,
+    "attempts": 4,
+    "uniqueOnly": false,
+    "time": 263,
+    "date": "2025-04-08T21:26:13.136Z"
+  },
+  {
+    "name": "Johnny Åström",
+    "wordLength": 5,
+    "attempts": 5,
+    "uniqueOnly": false,
+    "time": 52,
+    "date": "2025-04-08T22:19:37.812Z"
   }
 ]

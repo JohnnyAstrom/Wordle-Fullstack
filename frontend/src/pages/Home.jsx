@@ -113,10 +113,11 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5080/api/game/highscore', {
+      const response = await fetch('http://localhost:5080/api/game/finish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          gameId,
           name: playerName,
           wordLength,
           attempts: guessHistory.length,
