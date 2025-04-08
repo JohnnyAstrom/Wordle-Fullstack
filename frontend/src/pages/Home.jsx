@@ -50,6 +50,7 @@ function Home({ wordLength, uniqueOnly }) {
           name: playerName,
           wordLength: word.length,
           attempts: guessHistory.length,
+          uniqueOnly: uniqueOnly
         }),
       });
 

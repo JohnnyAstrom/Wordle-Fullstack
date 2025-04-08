@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { saveHighscore } from './saveHighscore.js';
 
-const testPath = path.resolve('./data/test-highscores.json');
+const testPath = path.resolve('./data/test-save-highscores.json');
 
 describe('saveHighscore', () => {
   afterEach(() => {
@@ -13,13 +13,14 @@ describe('saveHighscore', () => {
     const entry = {
       name: 'TestUser',
       wordLength: 5,
-      attempts: 4
+      attempts: 4,
+      uniqueOnly: false
     };
 
     // Initialize the testfile with and empty array
     fs.writeFileSync(testPath, '[]');
 
-    const result = saveHighscore(entry.name, entry.wordLength, entry.attempts, testPath);
+    const result = saveHighscore(entry.name, entry.wordLength, entry.attempts, entry.uniqueOnly, testPath);
 
     const contents = JSON.parse(fs.readFileSync(testPath, 'utf8'));
 

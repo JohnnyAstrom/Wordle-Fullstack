@@ -3,78 +3,35 @@
     "name": "Johnny",
     "wordLength": 5,
     "attempts": 4,
-    "date": "2025-04-05T13:56:48.914Z"
-  },
-  {
-    "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 4,
-    "date": "2025-04-05T13:56:49.864Z"
-  },
-  {
-    "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 4,
-    "date": "2025-04-05T13:56:50.417Z"
+    "uniqueOnly": false,
+    "date": "2025-04-07T21:35:26.320Z"
   },
   {
     "name": "Johnny",
     "wordLength": 5,
     "attempts": 3,
-    "date": "2025-04-05T13:56:50.417Z"
+    "uniqueOnly": false,
+    "date": "2025-04-07T21:44:44.225Z"
   },
   {
     "name": "Johnny",
-    "wordLength": 5,
+    "wordLength": 8,
     "attempts": 4,
-    "date": "2025-04-06T13:54:38.566Z"
+    "uniqueOnly": false,
+    "date": "2025-04-07T21:47:43.501Z"
   },
   {
     "name": "Johnny",
     "wordLength": 5,
-    "attempts": 1,
-    "date": "2025-04-06T13:58:11.644Z"
+    "attempts": 5,
+    "uniqueOnly": true,
+    "date": "2025-04-07T21:54:21.932Z"
   },
   {
     "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 1,
-    "date": "2025-04-06T14:00:20.009Z"
-  },
-  {
-    "name": "Johnny Åström",
-    "wordLength": 5,
-    "attempts": 3,
-    "date": "2025-04-06T14:14:03.127Z"
-  },
-  {
-    "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 1,
-    "date": "2025-04-06T14:17:10.606Z"
-  },
-  {
-    "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 3,
-    "date": "2025-04-06T14:22:59.587Z"
-  },
-  {
-    "name": "Johnny",
-    "wordLength": 5,
-    "attempts": 4,
-    "date": "2025-04-06T14:30:42.591Z"
-  },
-  {
-    "name": "Speedo",
-    "wordLength": 5,
+    "wordLength": 6,
     "attempts": 6,
-    "date": "2025-04-06T16:18:06.558Z"
-  },
-  {
-    "name": "Johnny Åström",
-    "wordLength": 5,
-    "attempts": 6,
-    "date": "2025-04-07T12:19:36.199Z"
+    "uniqueOnly": false,
+    "date": "2025-04-07T21:55:26.686Z"
   }
 ]
