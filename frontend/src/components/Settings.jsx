@@ -5,7 +5,9 @@ function SettingsPage({
   wordLength,
   setWordLength,
   uniqueOnly,
-  setUniqueOnly
+  setUniqueOnly,
+  timedMode,
+  setTimedMode
 }) {
   const wordOptions = [5, 6, 7, 8];
 
@@ -36,6 +38,21 @@ function SettingsPage({
             type="checkbox"
             checked={uniqueOnly}
             onChange={(e) => setUniqueOnly(e.target.checked)}
+          />
+          <span className="slider" />
+        </label>
+      </div>
+
+      <div className="section">
+        <label className="toggle">
+          <span>
+            Spela med tidtagning
+            <small>Tiden från start till vinst sparas</small>
+          </span>
+          <input
+            type="checkbox"
+            checked={timedMode}
+            onChange={(e) => setTimedMode(e.target.checked)}
           />
           <span className="slider" />
         </label>

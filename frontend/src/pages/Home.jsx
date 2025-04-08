@@ -4,7 +4,7 @@ import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
 import './Home.css';
 
-function Home({ wordLength, uniqueOnly }) {
+function Home({ wordLength, uniqueOnly, timedMode }) {
   const [word, setWord] = useState(null);
   const [guess, setGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState([]);
@@ -15,6 +15,8 @@ function Home({ wordLength, uniqueOnly }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [timeTaken, setTimeTaken] = useState(null);
 
   const MAX_GUESSES = 6;
 
@@ -31,6 +33,13 @@ function Home({ wordLength, uniqueOnly }) {
       setIsSubmitted(false);
       setIsGameOver(false);
       setHasWon(false);
+
+      if (timedMode) {
+        setStartTime(Date.now());
+      } else {
+        setStartTime(null);
+      }
+      setTimeTaken(null);
     } catch (error) {
       console.error('Could not fetch word:', error);
     }
@@ -50,7 +59,9 @@ function Home({ wordLength, uniqueOnly }) {
           name: playerName,
           wordLength: word.length,
           attempts: guessHistory.length,
-          uniqueOnly: uniqueOnly
+          uniqueOnly,
+          timedMode,
+          time: timedMode ? timeTaken : undefined
         }),
       });
 
@@ -108,6 +119,11 @@ function Home({ wordLength, uniqueOnly }) {
         setGameMessage(`Du gissade rätt! Ordet var: ${word}`);
         setIsGameOver(true);
         setHasWon(true);
+
+        if (timedMode && startTime) {
+          const duration = Math.floor((Date.now() - startTime) / 1000);
+          setTimeTaken(duration);
+        }
       } else if (guessHistory.length + 1 >= MAX_GUESSES) {
         setGameMessage(`Du har använt alla försök. Rätt ord var: ${word}`);
         setIsGameOver(true);
@@ -179,6 +195,10 @@ function Home({ wordLength, uniqueOnly }) {
         <div className="game-message">
           <p>{gameMessage}</p>
 
+          {hasWon && timeTaken !== null && (
+            <p>Din tid: {timeTaken} sekunder</p>
+          )}
+
           {hasWon && !isSubmitted && (
             <form
               className="highscore-form"
@@ -193,9 +213,7 @@ function Home({ wordLength, uniqueOnly }) {
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder="Ditt namn"
               />
-              <button type="submit">
-                Spara highscore
-              </button>
+              <button type="submit">Spara highscore</button>
             </form>
           )}
 

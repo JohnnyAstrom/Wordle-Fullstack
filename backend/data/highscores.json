@@ -33,5 +33,13 @@
     "attempts": 6,
     "uniqueOnly": false,
     "date": "2025-04-07T21:55:26.686Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 4,
+    "uniqueOnly": false,
+    "time": 23,
+    "date": "2025-04-08T10:05:46.651Z"
   }
 ]

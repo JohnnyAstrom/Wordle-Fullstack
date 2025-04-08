@@ -34,13 +34,13 @@ router.get('/start', (req, res) => {
 
 // POST /api/game/highscore
 router.post('/highscore', (req, res) => {
-  const { name, wordLength, attempts, uniqueOnly } = req.body;
+  const { name, wordLength, attempts, uniqueOnly, time } = req.body;
 
   if (!name || !attempts || !wordLength) {
     return res.status(400).json({ error: 'Namn, antal försök och ordlängd krävs' });
   }
 
-  const entry = saveHighscore(name, wordLength, attempts, uniqueOnly);
+  const entry = saveHighscore(name, wordLength, attempts, uniqueOnly, time);
   res.status(201).json({ message: 'Highscore sparat!', entry });
 });
 

@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 function App() {
   const [wordLength, setWordLength] = useState(5);
   const [uniqueOnly, setUniqueOnly] = useState(false);
+  const [timedMode, setTimedMode] = useState(false);
 
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
           <Home
             wordLength={wordLength}
             uniqueOnly={uniqueOnly}
+            timedMode={timedMode}
           />
         } />
         <Route path="/settings" element={
@@ -25,6 +27,8 @@ function App() {
             setWordLength={setWordLength}
             uniqueOnly={uniqueOnly}
             setUniqueOnly={setUniqueOnly}
+            timedMode={timedMode}
+            setTimedMode={setTimedMode}
           />
         } />
         <Route path="/about" element={<About />} />

@@ -16,6 +16,8 @@
         <th>Namn</th>
         <th>Försök</th>
         <th>Ordets längd</th>
+        <th>Unika bokstäver</th>
+        <th>Tid</th>
         <th>Datum</th>
       </tr>
     </thead>
@@ -25,7 +27,9 @@
           <td><%= score.name %></td>
           <td><%= score.attempts %></td>
           <td><%= score.wordLength %></td>
-          <td><%= new Date(score.date).toLocaleDateString() %></td>
+          <td><%= score.uniqueOnly ? 'Ja' : 'Nej' %></td>
+          <td><%= score.time !== undefined ? score.time + ' sek' : '-' %></td>
+          <td><%= score.date.split('T')[0] %></td>
         </tr>
       <% }) %>
     </tbody>
