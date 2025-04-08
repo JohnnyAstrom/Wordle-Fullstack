@@ -4,39 +4,40 @@ import { evaluateGuess } from '../logic/evaluateGuess.js';
 import { getRandomWord } from '../logic/getRandomWord.js';
 import { saveHighscore } from '../logic/saveHighscore.js';
 import { getHighscores } from '../logic/getHighscores.js';
-import { createGame } from '../logic/activeGames.js';
+import { createGame, getGame } from '../logic/activeGames.js';
 
 const router = express.Router();
 
 // POST /api/game/guess
 router.post('/guess', (req, res) => {
-  const { guessedWord, correctWord } = req.body;
+  const { gameId, guessedWord } = req.body;
 
-  if (!guessedWord || !correctWord) {
-    return res.status(400).json({ error: 'Du måste skicka med både guessedWord och correctWord' });
+  if (!gameId || !guessedWord) {
+    return res.status(400).json({ error: 'gameId och guessedWord krävs' });
   }
 
-  const feedback = evaluateGuess(guessedWord.toUpperCase(), correctWord.toUpperCase());
+  const game = getGame(gameId);
+
+  if (!game) {
+    return res.status(404).json({ error: 'Spelet hittades inte' });
+  }
+
+  const feedback = evaluateGuess(guessedWord.toUpperCase(), game.word.toUpperCase());
   res.json({ feedback });
 });
 
 // POST /api/game/start
 router.post('/start', (req, res) => {
-  const length = parseInt(req.body.length) || 5;
-  const uniqueOnly = req.body.uniqueOnly === true;
-
+  const { length, uniqueOnly } = req.body;
   const word = getRandomWord(length, uniqueOnly);
 
   if (!word) {
-    return res.status(404).json({ error: 'Kunde inte hitta ett ord med dessa kriterier' });
+    return res.status(404).json({ error: 'Kunde inte hitta något ord' });
   }
 
   const gameId = createGame(word, uniqueOnly);
 
-  res.status(200).json({
-    gameId,
-    wordLength: word.length
-  });
+  res.status(200).json({ gameId, wordLength: word.length });
 });
 
 // POST /api/game/highscore

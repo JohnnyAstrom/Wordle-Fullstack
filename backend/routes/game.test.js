@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import path from 'path';
 import gameRouter from './game.js';
+import { createGame } from '../logic/activeGames.js';
 
 const app = express();
 
@@ -59,6 +60,41 @@ describe('POST /api/game/start', () => {
       .send({ length: 99, uniqueOnly: true });
 
     expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty('error');
+  });
+});
+
+describe('POST /api/game/guess', () => {
+  it('should return feedback when guessing a word with a valid gameId', async () => {
+    const correctWord = 'APPLE';
+    const gameId = createGame(correctWord);
+
+    const response = await request(app)
+      .post('/api/game/guess')
+      .send({ gameId, guessedWord: 'ALERT' });
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body.feedback)).toBe(true);
+
+    const letters = response.body.feedback.map(f => f.letter).join('');
+    expect(letters).toBe('ALERT');
+  });
+
+  it('should return 404 if gameId is not found', async () => {
+    const response = await request(app)
+      .post('/api/game/guess')
+      .send({ gameId: 'non-existent-id', guessedWord: 'ALERT' });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty('error');
+  });
+
+  it('should return 400 if required data is missing', async () => {
+    const response = await request(app)
+      .post('/api/game/guess')
+      .send({ gameId: 'something' }); // saknar guessedWord
+
+    expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('error');
   });
 });
