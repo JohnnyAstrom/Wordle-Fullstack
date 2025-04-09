@@ -97,7 +97,10 @@ router.get('/highscores', (req, res) => {
     highscores = highscores.filter(score => score.timedMode === true);
   }
 
-  res.render('highscores', { highscores });
+  res.render('highscores', {
+    highscores,
+    query: req.query
+  });
 });
 
 export default router;

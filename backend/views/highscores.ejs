@@ -9,6 +9,30 @@
   <% title = "Highscores" %>
   
   <h1>Highscore-lista</h1>
+
+  <form method="GET" action="/api/game/highscores" class="filter-form">
+    <label>
+      Ordets längd:
+      <select name="wordLength">
+        <option value="">Alla</option>
+        <% [5, 6, 7, 8].forEach(len => { %>
+          <option value="<%= len %>" <%= Number(len) === Number(query.wordLength) ? 'selected' : '' %>><%= len %></option>
+        <% }) %>
+      </select>
+    </label>
+  
+    <label>
+      <input type="checkbox" name="uniqueOnly" value="true" <%= query.uniqueOnly === 'true' ? 'checked' : '' %> />
+      Endast unika bokstäver
+    </label>
+  
+    <label>
+      <input type="checkbox" name="timedMode" value="true" <%= query.timedMode === 'true' ? 'checked' : '' %> />
+      Endast med tidtagning
+    </label>
+  
+    <button type="submit">Filtrera</button>
+  </form>
   
   <table class="highscore-table">
     <thead>
@@ -28,7 +52,7 @@
           <td><%= score.attempts %></td>
           <td><%= score.wordLength %></td>
           <td><%= score.uniqueOnly ? 'Ja' : 'Nej' %></td>
-          <td><%= score.time !== undefined ? score.time + ' sek' : '-' %></td>
+          <td><%= score.time !== undefined && score.time !== null ? score.time + ' sek' : '-' %></td>
           <td><%= score.date.split('T')[0] %></td>
         </tr>
       <% }) %>
