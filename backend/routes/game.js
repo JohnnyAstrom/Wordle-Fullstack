@@ -92,6 +92,11 @@ router.get('/highscores', (req, res) => {
     highscores = highscores.filter(score => score.uniqueOnly === true);
   }
 
+  const timedMode = req.query.timedMode;
+  if (timedMode === 'true') {
+    highscores = highscores.filter(score => score.timedMode === true);
+  }
+
   res.render('highscores', { highscores });
 });
 

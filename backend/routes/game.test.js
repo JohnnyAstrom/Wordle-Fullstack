@@ -34,6 +34,17 @@ describe('GET /highscores', () => {
     expect(response.text).not.toContain('TestUser99');
   });
 
+  it('should render filtered highscores with wordLength=6 and timedMode=true from test-highscore file', async () => {
+    const response = await request(app).get(
+      '/api/game/highscores?useTestData=true&wordLength=6&timedMode=true'
+    );
+  
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toContain('<!DOCTYPE html');
+    expect(response.text).toContain('TestUserWithTimer');
+    expect(response.text).not.toContain('TestUserWithoutTimer');
+  });
+
   it('should render an empty table if no highscores match the filter', async () => {
     const response = await request(app).get(
       '/api/game/highscores?wordLength=999'
