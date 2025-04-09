@@ -37,12 +37,12 @@
   <table class="highscore-table">
     <thead>
       <tr>
-        <th>Namn</th>
-        <th>Försök</th>
-        <th>Ordets längd</th>
-        <th>Unika bokstäver</th>
-        <th>Tid</th>
-        <th>Datum</th>
+        <th><a href="<%= getSortLink('name', query.sortBy, query.order, query) %>">Namn</a></th>
+        <th><a href="<%= getSortLink('attempts', query.sortBy, query.order, query) %>">Försök</a></th>
+        <th><a href="<%= getSortLink('wordLength', query.sortBy, query.order, query) %>">Ordets längd</a></th>
+        <th><a href="<%= getSortLink('uniqueOnly', query.sortBy, query.order, query) %>">Unika bokstäver</a></th>
+        <th><a href="<%= getSortLink('time', query.sortBy, query.order, query) %>">Tid</a></th>
+        <th><a href="<%= getSortLink('date', query.sortBy, query.order, query) %>">Datum</a></th>
       </tr>
     </thead>
     <tbody>
@@ -52,7 +52,7 @@
           <td><%= score.attempts %></td>
           <td><%= score.wordLength %></td>
           <td><%= score.uniqueOnly ? 'Ja' : 'Nej' %></td>
-          <td><%= score.time !== undefined && score.time !== null ? score.time + ' sek' : '-' %></td>
+          <td><%= (score.time !== undefined && score.time !== null) ? score.time + ' sek' : '---' %></td>
           <td><%= score.date.split('T')[0] %></td>
         </tr>
       <% }) %>

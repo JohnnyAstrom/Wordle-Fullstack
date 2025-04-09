@@ -5,6 +5,7 @@ import { getRandomWord } from '../logic/getRandomWord.js';
 import { saveHighscore } from '../logic/saveHighscore.js';
 import { getHighscores } from '../logic/getHighscores.js';
 import { createGame, getGame, endGame } from '../logic/activeGames.js';
+import { filterAndSort, buildSortLink } from '../logic/filterAndSortHighscores.js';
 
 const router = express.Router();
 
@@ -73,33 +74,18 @@ router.post('/finish', (req, res) => {
   }
 });
 
-
-// GET /api/game/highscores (SSR)
 router.get('/highscores', (req, res) => {
   const filePath = req.query.useTestData === 'true'
     ? path.resolve('./data/test-highscores.json')
     : path.resolve('./data/highscores.json');
 
-  let highscores = getHighscores(filePath);
-
-  const wordLength = req.query.wordLength;
-  if (wordLength) {
-    highscores = highscores.filter(score => score.wordLength === Number(wordLength));
-  }
-
-  const uniqueOnly = req.query.uniqueOnly;
-  if (uniqueOnly === 'true') {
-    highscores = highscores.filter(score => score.uniqueOnly === true);
-  }
-
-  const timedMode = req.query.timedMode;
-  if (timedMode === 'true') {
-    highscores = highscores.filter(score => score.timedMode === true);
-  }
+  const highscores = getHighscores(filePath);
+  const filteredHighscores = filterAndSort(highscores, req.query);
 
   res.render('highscores', {
-    highscores,
-    query: req.query
+    highscores: filteredHighscores,
+    query: req.query,
+    getSortLink: buildSortLink
   });
 });
 
