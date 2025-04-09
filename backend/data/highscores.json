@@ -70,5 +70,32 @@
     "timedMode": true,
     "time": 52,
     "date": "2025-04-08T22:19:37.812Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 5,
+    "uniqueOnly": false,
+    "time": 73,
+    "timedMode": false,
+    "date": "2025-04-09T20:31:07.763Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 4,
+    "uniqueOnly": false,
+    "time": null,
+    "timedMode": false,
+    "date": "2025-04-09T20:44:31.925Z"
+  },
+  {
+    "name": "Johnny",
+    "wordLength": 5,
+    "attempts": 3,
+    "uniqueOnly": false,
+    "time": 30,
+    "timedMode": true,
+    "date": "2025-04-09T20:45:31.132Z"
   }
 ]

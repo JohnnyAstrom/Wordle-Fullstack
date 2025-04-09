@@ -42,7 +42,7 @@ router.post('/guess', (req, res) => {
 
 // POST /api/game/finish
 router.post('/finish', (req, res) => {
-  const { gameId, name, attempts, wordLength, uniqueOnly, time, useTestPath } = req.body;
+  const { gameId, name, attempts, wordLength, uniqueOnly, timedMode, useTestPath } = req.body;
 
   if (!gameId || !name || !attempts || !wordLength) {
     return res.status(400).json({ error: 'gameId, name, attempts och wordLength krävs' });
@@ -53,7 +53,7 @@ router.post('/finish', (req, res) => {
     return res.status(404).json({ error: 'Spelet hittades inte' });
   }
 
-  const finalTime = result.timeTaken;
+  const finalTime = timedMode ? result.timeTaken : null;
   const filePath = useTestPath
     ? path.resolve('./data/test-save-highscores.json')
     : path.resolve('./data/highscores.json');
@@ -65,7 +65,8 @@ router.post('/finish', (req, res) => {
       attempts,
       uniqueOnly,
       finalTime,
-      filePath
+      filePath,
+      timedMode
     );
 
     res.status(201).json({ message: 'Highscore sparat!', entry });
@@ -74,6 +75,7 @@ router.post('/finish', (req, res) => {
   }
 });
 
+// GET /api/game/highscores SSR rendering with filter and sort logic
 router.get('/highscores', (req, res) => {
   const filePath = req.query.useTestData === 'true'
     ? path.resolve('./data/test-highscores.json')

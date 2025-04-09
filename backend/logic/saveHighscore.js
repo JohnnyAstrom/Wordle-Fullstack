@@ -3,13 +3,22 @@ import path from 'path';
 
 const defaultPath = path.resolve('./data/highscores.json');
 
-export function saveHighscore(name, wordLength, attempts, uniqueOnly, time, filePath = defaultPath) {
+export function saveHighscore(
+  name,
+  wordLength,
+  attempts,
+  uniqueOnly,
+  time,
+  filePath = defaultPath,
+  timedMode = false
+) {
   const entry = {
     name,
     wordLength,
     attempts,
     uniqueOnly,
     time,
+    timedMode,
     date: new Date().toISOString()
   };
 

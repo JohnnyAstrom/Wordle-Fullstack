@@ -12,7 +12,7 @@ function SettingsPage({
   const wordOptions = [5, 6, 7, 8];
 
   return (
-    <div className="settings-container">
+    <>
       <div className="section">
         <h3>Antal bokstäver</h3>
         <div className="letter-buttons">
@@ -57,7 +57,7 @@ function SettingsPage({
           <span className="slider" />
         </label>
       </div>
-    </div>
+    </>
   );
 }
 

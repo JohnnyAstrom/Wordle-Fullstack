@@ -1,0 +1,25 @@
+.setup-container {
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.start-button {
+  background: linear-gradient(to right, #00d26a, #008c3f);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, #00b45a, #007a36);
+}
+
+.start-button:active {
+  transform: scale(0.98);
+}

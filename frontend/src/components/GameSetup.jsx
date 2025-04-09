@@ -3,8 +3,10 @@ import './GameSetup.css';
 
 function GameSetup({ onStart }) {
   return (
-    <div className="game-setup">
-      <button onClick={() => onStart()}>Starta spel</button>
+    <div className="setup-container">
+      <button className="start-button" onClick={onStart}>
+        Starta nytt spel
+      </button>
     </div>
   );
 }

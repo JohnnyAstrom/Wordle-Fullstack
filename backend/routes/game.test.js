@@ -127,23 +127,25 @@ describe('POST /api/game/finish', () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const response = await request(app)
-      .post('/api/game/finish')
-      .send({
-        gameId,
-        name: 'TestUser',
-        attempts: 3,
-        wordLength: word.length,
-        uniqueOnly: true,
-        useTestPath: true
-      });
+    .post('/api/game/finish')
+    .send({
+      gameId,
+      name: 'TestUser',
+      attempts: 3,
+      wordLength: word.length,
+      uniqueOnly: true,
+      useTestPath: true,
+      timedMode: true
+    });
 
     expect(response.statusCode).toBe(201);
     expect(response.body).toHaveProperty('message', 'Highscore sparat!');
     expect(response.body.entry).toMatchObject({
       name: 'TestUser',
-      wordLength: 5,
       attempts: 3,
-      uniqueOnly: true
+      wordLength: word.length,
+      uniqueOnly: true,
+      timedMode: true
     });
     expect(typeof response.body.entry.time).toBe('number');
     expect(response.body.entry.time).toBeGreaterThan(0);

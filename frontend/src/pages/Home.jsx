@@ -181,8 +181,9 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       <GameSetup onStart={fetchWord} />
 
       {gameId && (
-        <>
+        <div className="game-area">
           <Board
+            key={gameId}
             guessHistory={guessHistory}
             currentGuess={guess}
             wordLength={wordLength}
@@ -191,7 +192,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
             onKeyPress={handleKeyPress}
             keyFeedback={keyFeedback}
           />
-        </>
+        </div>
       )}
 
       {gameMessage && (
