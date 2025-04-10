@@ -27,6 +27,39 @@
   max-width: 600px;
 }
 
+.submit-button {
+  background: linear-gradient(to right, #00d26a, #008c3f);
+  cursor: pointer;
+  color: white;
+}
+
+.save-highscore-container input, .submit-button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, #00b45a, #007a36);
+}
+
+.dddback-button {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: linear-gradient(to right, #00d26a, #008c3f);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+
 @media (max-width: 409px) {
   .game-area {
     transform: scale(0.7);
@@ -38,6 +71,11 @@
     margin-top: -1rem;
     font-size: 1.5rem;
   }
+
+  .save-highscore-container input, .submit-button {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
 }
 
 @media (min-width: 410px) and (max-width: 600px) {
@@ -45,5 +83,10 @@
     transform: scale(0.8);
     transform-origin: top center;
     height: 500px;
+  }
+
+  .save-highscore-container input, .submit-button {
+    padding: 0.5rem;
+    font-size: 0.9rem;
   }
 }

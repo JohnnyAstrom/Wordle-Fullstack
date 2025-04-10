@@ -217,13 +217,15 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
                 handleHighscoreSubmit();
               }}
             >
-              <input
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Your name"
-              />
-              <button type="submit">Save Highscore</button>
+              <div className="save-highscore-container">
+                <input
+                  type="text"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  placeholder="Your name"
+                />
+                <button className="submit-button" type="submit">Save highscore</button>
+              </div>
             </form>
           )}
 
