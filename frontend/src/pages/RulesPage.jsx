@@ -30,7 +30,7 @@ const RulesPage = () => {
           </div>
           <div className="word-example">
             <div className="tile">L</div>
-            <div className="tile yellow">I</div>
+            <div className="tile orange">I</div>
             <div className="tile">G</div>
             <div className="tile">H</div>
             <div className="tile">T</div>

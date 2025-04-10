@@ -38,17 +38,17 @@
 }
 
 .rules-container .example .green {
-  background-color: #6aaa64;
+  background-color: #27ae60;
   color: white;
 }
 
-.rules-container .example .yellow {
-  background-color: #c9b458;
+.rules-container .example .orange {
+  background-color: #f39c12;
   color: white;
 }
 
 .rules-container .example .gray {
-  background-color: #787c7e;
+  background-color: #7f8c8d;
   color: white;
 }
 
