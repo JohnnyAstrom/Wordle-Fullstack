@@ -8,11 +8,11 @@
 .keyboard-row {
   display: flex;
   gap: 8px;
-  justify-content: center; /* Centrerar tangenterna i raden */
+  justify-content: center;
 }
 
 .keyboard-row:nth-child(2) {
-  margin-left: 1rem; /* Ger lite indrag, som på riktiga keyboard */
+  margin-left: 1rem;
 }
 
 .key {

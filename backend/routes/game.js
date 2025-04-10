@@ -84,9 +84,19 @@ router.get('/highscores', (req, res) => {
   const highscores = getHighscores(filePath);
   const filteredHighscores = filterAndSort(highscores, req.query);
 
+  // Paginering
+  const pageSize = 10;
+  const currentPage = Number(req.query.page) || 1;
+  const totalPages = Math.ceil(filteredHighscores.length / pageSize);
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedHighscores = filteredHighscores.slice(startIndex, startIndex + pageSize);
+
   res.render('highscores', {
-    highscores: filteredHighscores,
+    highscores: paginatedHighscores,
     query: req.query,
+    currentPage,
+    totalPages,
     getSortLink: buildSortLink
   });
 });
