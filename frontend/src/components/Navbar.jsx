@@ -5,12 +5,13 @@ import './Navbar.css';
 function Navbar() {
   return (
     <nav className="navbar">
-      <Link to="/">Spelet</Link>
-      <Link to="/settings">Inställningar</Link>
-      <Link to="/about">Om</Link>
+      <Link to="/">Play</Link>
       <a href="http://localhost:5080/api/game/highscores">
         Highscores
       </a>
+      <Link to="/rules">Gamerules</Link>
+      <Link to="/about">About</Link>
+      <Link to="/settings">Settings</Link>
     </nav>
   );
 }

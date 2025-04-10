@@ -1,14 +1,16 @@
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
 }
 
 .highscore-container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 1rem auto;
   padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -171,10 +173,6 @@ h1 {
     font-size: 0.85rem;
   }
 
-  h1 {
-    font-size: 1.6rem;
-  }
-
   .highscore-table td,
   .highscore-table th {
     padding: 0.5rem;
@@ -186,5 +184,12 @@ h1 {
 
   .back-button-container {
     margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 409px) {
+  h1 {
+    margin-top: -1rem;
+    font-size: 1.5rem;
   }
 }

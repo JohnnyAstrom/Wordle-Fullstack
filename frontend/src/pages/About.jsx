@@ -4,15 +4,15 @@ import './About.css';
 function About() {
   return (
     <div className="about-container">
-      <h1>Om projektet</h1>
+      <h1>About the Project</h1>
       <p>
-        Det här är ett Wordle-inspirerat spel byggt som en fullstack-applikation med React och Express.
+        This is a Wordle-inspired game built as a full-stack application using React and Express.
       </p>
       <p>
-        Spelet inkluderar feedback per bokstav, highscore-lista med filtrering och sortering, samt möjligheten att spela med tidtagning.
+        The game includes letter-by-letter feedback, a highscore list with filtering and sorting, as well as the option to play with a timer.
       </p>
       <p>
-        Projektet är utvecklat som en inlämningsuppgift för kursen Avancerad Webbutveckling.
+        The project was developed as a submission for the Advanced Web Development course.
       </p>
     </div>
   );

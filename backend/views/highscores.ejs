@@ -12,88 +12,89 @@
 <body>
   <% title="Highscores" %>
     <div class="highscore-container">
-      <h1>Highscore-lista</h1>
+      <h1>Highscore List</h1>
 
       <form method="GET" action="/api/game/highscores" class="filter-form">
         <label>
-          Ordets längd:
+          Word Length:
           <select name="wordLength">
-            <option value="">Alla</option>
-            <% [5, 6, 7, 8].forEach(len=> { %>
-              <option value="<%= len %>" <%=Number(len)===Number(query.wordLength) ? 'selected' : '' %>><%= len %>
+            <option value="">All</option>
+            <% [5, 6, 7, 8].forEach(len => { %>
+              <option value="<%= len %>" <%= Number(len) === Number(query.wordLength) ? 'selected' : '' %>><%= len %>
               </option>
-              <% }) %>
+            <% }) %>
           </select>
         </label>
 
         <label>
-          <input type="checkbox" name="uniqueOnly" value="true" <%=query.uniqueOnly==='true' ? 'checked' : '' %> />
-          Endast unika bokstäver
+          <input type="checkbox" name="uniqueOnly" value="true" <%= query.uniqueOnly === 'true' ? 'checked' : '' %> />
+          Only Unique Letters
         </label>
 
         <label>
-          <input type="checkbox" name="timedMode" value="true" <%=query.timedMode==='true' ? 'checked' : '' %> />
-          Endast med tidtagning
+          <input type="checkbox" name="timedMode" value="true" <%= query.timedMode === 'true' ? 'checked' : '' %> />
+          Timed Mode Only
         </label>
 
-        <button type="submit">Filtrera</button>
+        <button type="submit">Filter</button>
       </form>
-      <div class="table-scroll-container">
-        <table class="highscore-table">
-          <thead>
+
+      <table class="highscore-table">
+        <thead>
+          <tr>
+            <th><a href="<%= getSortLink('name', query.sortBy, query.order, query) %>">Name</a></th>
+            <th><a href="<%= getSortLink('attempts', query.sortBy, query.order, query) %>">Attempts</a></th>
+            <th><a href="<%= getSortLink('wordLength', query.sortBy, query.order, query) %>">Word Length</a></th>
+            <th><a href="<%= getSortLink('uniqueOnly', query.sortBy, query.order, query) %>">Unique Letters</a></th>
+            <th><a href="<%= getSortLink('time', query.sortBy, query.order, query) %>">Time</a></th>
+            <th><a href="<%= getSortLink('date', query.sortBy, query.order, query) %>">Date</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% highscores.forEach(score => { %>
             <tr>
-              <th><a href="<%= getSortLink('name', query.sortBy, query.order, query) %>">Namn</a></th>
-              <th><a href="<%= getSortLink('attempts', query.sortBy, query.order, query) %>">Försök</a></th>
-              <th><a href="<%= getSortLink('wordLength', query.sortBy, query.order, query) %>">Ordets längd</a></th>
-              <th><a href="<%= getSortLink('uniqueOnly', query.sortBy, query.order, query) %>">Unika bokstäver</a></th>
-              <th><a href="<%= getSortLink('time', query.sortBy, query.order, query) %>">Tid</a></th>
-              <th><a href="<%= getSortLink('date', query.sortBy, query.order, query) %>">Datum</a></th>
+              <td>
+                <%= score.name %>
+              </td>
+              <td>
+                <%= score.attempts %>
+              </td>
+              <td>
+                <%= score.wordLength %>
+              </td>
+              <td>
+                <%= score.uniqueOnly ? 'Yes' : 'No' %>
+              </td>
+              <td>
+                <%= (score.time !== undefined && score.time !== null) ? score.time + ' sec' : '---' %>
+              </td>
+              <td>
+                <%= score.date.split('T')[0] %>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <% highscores.forEach(score=> { %>
-              <tr>
-                <td>
-                  <%= score.name %>
-                </td>
-                <td>
-                  <%= score.attempts %>
-                </td>
-                <td>
-                  <%= score.wordLength %>
-                </td>
-                <td>
-                  <%= score.uniqueOnly ? 'Ja' : 'Nej' %>
-                </td>
-                <td>
-                  <%= (score.time !==undefined && score.time !==null) ? score.time + ' sek' : '---' %>
-                </td>
-                <td>
-                  <%= score.date.split('T')[0] %>
-                </td>
-              </tr>
-              <% }) %>
-          </tbody>
-        </table>
-      </div>
-      <% if (totalPages> 1) { %>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <% if (totalPages > 1) { %>
         <div class="pagination">
-          <% if (currentPage> 1) { %>
-            <a href="?<%= new URLSearchParams({ ...query, page: currentPage - 1 }).toString() %>">&laquo; Föregående</a>
-            <% } %>
+          <% if (currentPage > 1) { %>
+            <a href="?<%= new URLSearchParams({ ...query, page: currentPage - 1 }).toString() %>">&laquo; Previous</a>
+          <% } %>
 
-              <span>Sida <%= currentPage %> av <%= totalPages %></span>
+          <span>Page <%= currentPage %> of <%= totalPages %></span>
 
-              <% if (currentPage < totalPages) { %>
-                <a href="?<%= new URLSearchParams({ ...query, page: currentPage + 1 }).toString() %>">Nästa &raquo;</a>
-                <% } %>
+          <% if (currentPage < totalPages) { %>
+            <a href="?<%= new URLSearchParams({ ...query, page: currentPage + 1 }).toString() %>">Next &raquo;</a>
+          <% } %>
         </div>
-        <% } %>
-    </div>
-    <div class="back-button-container">
-      <a href="http://localhost:5173/" class="back-button">
-        Tillbaka till spelet
-      </a>
+      <% } %>
+
+      <div class="back-button-container">
+        <a href="http://localhost:5173/" class="back-button">
+          Back to Game
+        </a>
+      </div>
     </div>
 </body>
 

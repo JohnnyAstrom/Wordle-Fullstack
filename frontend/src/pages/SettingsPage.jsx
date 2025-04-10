@@ -16,7 +16,7 @@ function SettingsPage({
   return (
     <div className="settings-wrapper">
       <div className="settings-container">
-        <h1>Inställningar</h1>
+        <h1>Settings</h1>
         <Settings
           wordLength={wordLength}
           setWordLength={setWordLength}
@@ -26,7 +26,7 @@ function SettingsPage({
           setTimedMode={setTimedMode}
         />
         <button onClick={() => navigate('/')} className="back-button">
-          Tillbaka till spelet
+          Back to game
         </button>
       </div>
     </div>

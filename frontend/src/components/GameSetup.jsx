@@ -5,7 +5,7 @@ function GameSetup({ onStart }) {
   return (
     <div className="setup-container">
       <button className="start-button" onClick={onStart}>
-        Starta nytt spel
+        Start new game
       </button>
     </div>
   );

@@ -97,5 +97,14 @@
     "time": 30,
     "timedMode": true,
     "date": "2025-04-09T20:45:31.132Z"
+  },
+  {
+    "name": "Johnny Åström",
+    "wordLength": 5,
+    "attempts": 5,
+    "uniqueOnly": false,
+    "time": null,
+    "timedMode": false,
+    "date": "2025-04-10T14:21:53.819Z"
   }
 ]

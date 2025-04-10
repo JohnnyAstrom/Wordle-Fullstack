@@ -14,7 +14,7 @@ function SettingsPage({
   return (
     <>
       <div className="section">
-        <h3>Antal bokstäver</h3>
+        <h3>Number of Letters</h3>
         <div className="letter-buttons">
           {wordOptions.map((len) => (
             <button
@@ -31,8 +31,8 @@ function SettingsPage({
       <div className="section">
         <label className="toggle">
           <span>
-            Endast unika bokstäver
-            <small>Ordet får inte innehålla dubbla bokstäver</small>
+            Only Unique Letters
+            <small>The word cannot contain duplicate letters</small>
           </span>
           <input
             type="checkbox"
@@ -46,8 +46,8 @@ function SettingsPage({
       <div className="section">
         <label className="toggle">
           <span>
-            Spela med tidtagning
-            <small>Tiden från start till vinst sparas</small>
+            Play with Timer
+            <small>The time from start to win will be saved</small>
           </span>
           <input
             type="checkbox"

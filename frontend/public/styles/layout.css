@@ -19,3 +19,9 @@ html, body {
   color: white;
   font-weight: bold;
 }
+
+@media (max-width: 600px) {
+  .navbar {
+    font-size: 0.85rem;
+  }
+}
