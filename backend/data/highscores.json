@@ -106,5 +106,14 @@
     "time": null,
     "timedMode": false,
     "date": "2025-04-10T14:21:53.819Z"
+  },
+  {
+    "name": "Johnny Åström",
+    "wordLength": 5,
+    "attempts": 6,
+    "uniqueOnly": false,
+    "time": null,
+    "timedMode": false,
+    "date": "2025-04-10T22:22:36.020Z"
   }
 ]

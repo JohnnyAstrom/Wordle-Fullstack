@@ -17,6 +17,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
   const [startTime, setStartTime] = useState(null);
   const [timeTaken, setTimeTaken] = useState(null);
   const [gameId, setGameId] = useState(null);
+  const [correctWord, setCorrectWord] = useState(null);
 
   const MAX_GUESSES = 6;
 
@@ -29,7 +30,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Kunde inte starta nytt spel');
+      if (!response.ok) throw new Error(data.error || 'Could not start new game');
 
       setGameId(data.gameId);
       setGuess('');
@@ -48,7 +49,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       }
       setTimeTaken(null);
     } catch (error) {
-      console.error('Kunde inte starta nytt spel:', error);
+      console.error('Could not start new game:', error);
       setGameMessage(error.message);
     }
   }
@@ -57,7 +58,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     if (isGameOver || !guess || guess.length !== wordLength) return;
 
     if (guessHistory.length >= MAX_GUESSES) {
-      setGameMessage(`Du har nått maximala antal gissningar (${MAX_GUESSES}).`);
+      setGameMessage(`You have reached the maximum number of guesses (${MAX_GUESSES}).`);
       setIsGameOver(true);
       return;
     }
@@ -70,6 +71,11 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       });
 
       const result = await response.json();
+
+      if (result.correctWord) {
+        setCorrectWord(result.correctWord);
+      }
+
       const newFeedback = result.feedback;
 
       const newGuess = { guess, feedback: newFeedback };
@@ -88,12 +94,12 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       setKeyFeedback(updatedKeyFeedback);
 
       if (newFeedback.every((item) => item.result === 'correct')) {
-        setGameMessage(`Du gissade rätt!`);
+        setGameMessage(`You guessed correctly! 😊`);
         setIsGameOver(true);
         setHasWon(true);
         if (timedMode && startTime) setTimeTaken(Math.floor((Date.now() - startTime) / 1000));
       } else if (updatedHistory.length >= MAX_GUESSES) {
-        setGameMessage(`Du har använt alla försök.`);
+        setGameMessage(`No attempts left. 😞`);
         setIsGameOver(true);
       }
 
@@ -102,13 +108,13 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       setGuess('');
     } catch (error) {
       console.error('Error while sending guess:', error);
-      setGameMessage('Ett fel uppstod vid skickandet av din gissning');
+      setGameMessage('An error occurred while submitting your guess');
     }
   }
 
   async function handleHighscoreSubmit() {
     if (!playerName) {
-      setGameMessage('Du måste skriva ett namn!');
+      setGameMessage('You must enter a name!');
       return;
     }
 
@@ -132,11 +138,11 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       } else {
         const error = await response.json();
         console.error('Error saving highscore:', error);
-        setGameMessage('Kunde inte spara highscore.');
+        setGameMessage('Could not save highscore.');
       }
     } catch (error) {
-      console.error('Nätverksfel:', error);
-      setGameMessage('Nätverksfel vid sparande av highscore.');
+      console.error('Network error:', error);
+      setGameMessage('Network error while saving highscore.');
     }
   }
 
@@ -176,7 +182,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
   return (
     <div className="app-container">
-      <h1>Wordle-spelet</h1>
+      <h1>Wordle Game</h1>
 
       <GameSetup onStart={fetchWord} />
 
@@ -200,7 +206,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
           <p>{gameMessage}</p>
 
           {hasWon && timeTaken !== null && (
-            <p>Din tid: {timeTaken} sekunder</p>
+            <p>Your time: {timeTaken} seconds</p>
           )}
 
           {hasWon && !isSubmitted && (
@@ -215,13 +221,17 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Ditt namn"
+                placeholder="Your name"
               />
-              <button type="submit">Spara highscore</button>
+              <button type="submit">Save Highscore</button>
             </form>
           )}
 
-          {isSubmitted && hasWon && <p>Ditt resultat är sparat!</p>}
+          {isSubmitted && hasWon && <p>Well done! Your highscore is saved.</p>}
+
+          {!hasWon && isGameOver && correctWord && (
+            <p>The correct word was: <strong>{correctWord.toUpperCase()}</strong></p>
+          )}
         </div>
       )}
     </div>

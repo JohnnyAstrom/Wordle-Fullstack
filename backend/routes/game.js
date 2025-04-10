@@ -35,9 +35,19 @@ router.post('/guess', (req, res) => {
   if (!game) {
     return res.status(404).json({ error: 'Spelet hittades inte' });
   }
-
+  
   const feedback = evaluateGuess(guessedWord.toUpperCase(), game.word.toUpperCase());
-  res.json({ feedback });
+
+  game.guesses = game.guesses || [];
+  game.guesses.push(guessedWord);
+
+  const MAX_GUESSES = 6;
+  const hasLost = game.guesses.length >= MAX_GUESSES && !feedback.every(f => f.result === 'correct');
+
+  res.json({
+    feedback,
+    correctWord: hasLost ? game.word : undefined
+  });
 });
 
 // POST /api/game/finish
