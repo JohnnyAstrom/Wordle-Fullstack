@@ -6,7 +6,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/">Play</Link>
-      <a href="http://localhost:5080/api/game/highscores">
+      <a href="http://localhost:5080/highscores">
         Highscores
       </a>
       <Link to="/rules">Gamerules</Link>

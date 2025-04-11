@@ -1,6 +1,7 @@
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import gameRouter from './routes/game.js';
+import highscoreRouter from './routes/highscores.js';
 import cors from 'cors';
 import path from 'path';
 
@@ -16,6 +17,7 @@ app.set('views', path.resolve('./views'));
 app.set('layout', 'layout');
 
 app.use('/api/game', gameRouter);
+app.use('/highscores', highscoreRouter);
 
 const publicPath = path.resolve('../frontend/public');
 app.use(express.static(publicPath));
