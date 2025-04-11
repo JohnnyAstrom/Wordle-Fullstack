@@ -15,7 +15,6 @@
 .rules-container p {
   font-size: 1.5rem;
   font-weight: bold;
-
 }
 
 .rules-container ul li {
@@ -99,9 +98,5 @@
 
   .rules-container {
     margin: 0;
-  }
-
-  .rules-container h1 {
-    font-size: 1.6rem;
   }
 }

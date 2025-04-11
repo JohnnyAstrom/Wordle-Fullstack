@@ -19,8 +19,12 @@ app.set('layout', 'layout');
 app.use('/api/game', gameRouter);
 app.use('/highscores', highscoreRouter);
 
-const publicPath = path.resolve('../frontend/public');
+const publicPath = path.resolve('../frontend/dist');
 app.use(express.static(publicPath));
+
+app.get(['/rules', '/about', '/settings', '/'], (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

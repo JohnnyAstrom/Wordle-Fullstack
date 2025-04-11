@@ -9,7 +9,7 @@ function Navbar() {
       <a href="http://localhost:5080/highscores">
         Highscores
       </a>
-      <Link to="/rules">Gamerules</Link>
+      <Link to="/rules">How to Play</Link>
       <Link to="/about">About</Link>
       <Link to="/settings">Settings</Link>
     </nav>

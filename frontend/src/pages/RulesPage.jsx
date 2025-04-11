@@ -8,9 +8,8 @@ const RulesPage = () => {
   return (
     <div className="rules-wrapper">
       <div className="rules-container">
-        <h1>Game Rules</h1>
+        <h1>How to Play</h1>
         <ul>
-          <p>How to play:</p>
           <li>For each guess, try to figure out the correct word by guessing a combination of letters.</li>
           <li>Green means the correct letter in the correct position.</li>
           <li>Yellow means the correct letter in the wrong position.</li>
