@@ -64,7 +64,7 @@
   .game-area {
     transform: scale(0.7);
     transform-origin: top center;
-    height: 400px;
+    width: 100%
   }
 
   h1 {
@@ -76,13 +76,22 @@
     padding: 0.5rem;
     font-size: 0.8rem;
   }
+
+  .app-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 @media (min-width: 410px) and (max-width: 600px) {
   .game-area {
     transform: scale(0.8);
     transform-origin: top center;
-    height: 500px;
+  }
+
+  .app-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .save-highscore-container input, .submit-button {

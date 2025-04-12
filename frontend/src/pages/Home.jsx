@@ -56,13 +56,13 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
   async function handleGuess() {
     if (isGameOver || !guess || guess.length !== wordLength) return;
-  
+
     if (guessHistory.length >= MAX_GUESSES) {
       setGameMessage(`You have reached the maximum number of guesses (${MAX_GUESSES}).`);
       setIsGameOver(true);
       return;
     }
-  
+
     try {
       const response = await fetch(`/api/game/guess`, {
         method: 'POST',
@@ -72,23 +72,23 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
           guessedWord: guess
         })
       });
-  
+
       const result = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(result.error || 'Invalid guess');
       }
-  
+
       if (result.correctWord) {
         setCorrectWord(result.correctWord);
       }
-  
+
       const newFeedback = result.feedback;
-  
+
       const newGuess = { guess, feedback: newFeedback };
       const updatedHistory = guessHistory.concat(newGuess);
       setGuessHistory(updatedHistory);
-  
+
       const updatedKeyFeedback = { ...keyFeedback };
       newFeedback.forEach(({ letter, result }) => {
         const current = updatedKeyFeedback[letter];
@@ -99,7 +99,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         }
       });
       setKeyFeedback(updatedKeyFeedback);
-  
+
       if (newFeedback.every((item) => item.result === 'correct')) {
         setGameMessage(`You guessed correctly! 😊`);
         setIsGameOver(true);
@@ -111,7 +111,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         setGameMessage(`No attempts left. 😞`);
         setIsGameOver(true);
       }
-  
+
       const letters = guess.split('');
       setUsedLetters(usedLetters.concat(letters));
       setGuess('');
@@ -195,18 +195,21 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       <GameSetup onStart={fetchWord} />
 
       {gameId && (
-        <div className="game-area">
-          <Board
-            key={gameId}
-            guessHistory={guessHistory}
-            currentGuess={guess}
-            wordLength={wordLength}
-          />
+        <>
+          <div className="game-area">
+            <Board
+              key={gameId}
+              guessHistory={guessHistory}
+              currentGuess={guess}
+              wordLength={wordLength}
+            />
+          </div>
+
           <CustomKeyboard
             onKeyPress={handleKeyPress}
             keyFeedback={keyFeedback}
           />
-        </div>
+        </>
       )}
 
       {gameMessage && (
