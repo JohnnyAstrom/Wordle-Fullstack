@@ -156,7 +156,7 @@ h1 {
 
 @media (max-width: 600px) {
   .highscore-container {
-    padding: 1rem 0.5rem;
+    padding: 1.5rem 0.5rem;
   }
 
   .highscore-table th:nth-child(4),

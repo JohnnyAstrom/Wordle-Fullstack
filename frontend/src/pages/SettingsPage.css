@@ -39,9 +39,3 @@
 .back-button:active {
   transform: scale(0.98);
 }
-
-@media (max-width: 600px) {
-  .settings-wrapper {
-    padding: 1rem;
-  }
-}
