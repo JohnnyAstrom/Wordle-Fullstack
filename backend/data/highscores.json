@@ -1,6 +1,6 @@
 [
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 4,
     "uniqueOnly": false,
@@ -9,7 +9,7 @@
     "date": "2025-04-07T21:35:26.320Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 3,
     "uniqueOnly": false,
@@ -18,7 +18,7 @@
     "date": "2025-04-07T21:44:44.225Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 8,
     "attempts": 4,
     "uniqueOnly": false,
@@ -27,7 +27,7 @@
     "date": "2025-04-07T21:47:43.501Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 5,
     "uniqueOnly": true,
@@ -36,7 +36,7 @@
     "date": "2025-04-07T21:54:21.932Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 6,
     "attempts": 6,
     "uniqueOnly": false,
@@ -45,7 +45,7 @@
     "date": "2025-04-07T21:55:26.686Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 4,
     "uniqueOnly": false,
@@ -54,7 +54,7 @@
     "date": "2025-04-08T10:05:46.651Z"
   },
   {
-    "name": "Johnny Å",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 4,
     "uniqueOnly": false,
@@ -72,7 +72,7 @@
     "date": "2025-04-08T22:19:37.812Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 5,
     "uniqueOnly": false,
@@ -81,7 +81,7 @@
     "date": "2025-04-09T20:31:07.763Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 4,
     "uniqueOnly": false,
@@ -90,7 +90,7 @@
     "date": "2025-04-09T20:44:31.925Z"
   },
   {
-    "name": "Johnny",
+    "name": "Johnny Åström",
     "wordLength": 5,
     "attempts": 3,
     "uniqueOnly": false,
@@ -124,5 +124,14 @@
     "time": null,
     "timedMode": false,
     "date": "2025-04-11T14:27:04.920Z"
+  },
+  {
+    "name": "Johnny Åström",
+    "wordLength": 5,
+    "attempts": 5,
+    "uniqueOnly": false,
+    "time": null,
+    "timedMode": false,
+    "date": "2025-04-12T12:12:12.012Z"
   }
 ]
