@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GameSetup from "../components/GameSetup.jsx";
 import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
+import API_BASE_URL from '../config';
 import './Home.css';
 
 function Home({ wordLength, uniqueOnly, timedMode }) {
@@ -23,7 +24,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
   async function fetchWord() {
     try {
-      const response = await fetch('http://localhost:5080/api/game/start', {
+      const response = await fetch(`${API_BASE_URL}/api/game/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ length: wordLength, uniqueOnly })
@@ -64,7 +65,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5080/api/game/guess', {
+      const response = await fetch(`${API_BASE_URL}/api/game/guess`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId, guessedWord: guess })
@@ -119,7 +120,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5080/api/game/finish', {
+      const response = await fetch(`${API_BASE_URL}/api/game/finish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
