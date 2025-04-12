@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import GameSetup from "../components/GameSetup.jsx";
 import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
-import API_BASE_URL from '../config';
 import './Home.css';
 
 function Home({ wordLength, uniqueOnly, timedMode }) {
@@ -24,7 +23,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
   async function fetchWord() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/game/start`, {
+      const response = await fetch(`/api/game/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ length: wordLength, uniqueOnly })
@@ -57,32 +56,39 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
   async function handleGuess() {
     if (isGameOver || !guess || guess.length !== wordLength) return;
-
+  
     if (guessHistory.length >= MAX_GUESSES) {
       setGameMessage(`You have reached the maximum number of guesses (${MAX_GUESSES}).`);
       setIsGameOver(true);
       return;
     }
-
+  
     try {
-      const response = await fetch(`${API_BASE_URL}/api/game/guess`, {
+      const response = await fetch(`/api/game/guess`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, guessedWord: guess })
+        body: JSON.stringify({
+          gameId,
+          guessedWord: guess
+        })
       });
-
+  
       const result = await response.json();
-
+  
+      if (!response.ok) {
+        throw new Error(result.error || 'Invalid guess');
+      }
+  
       if (result.correctWord) {
         setCorrectWord(result.correctWord);
       }
-
+  
       const newFeedback = result.feedback;
-
+  
       const newGuess = { guess, feedback: newFeedback };
       const updatedHistory = guessHistory.concat(newGuess);
       setGuessHistory(updatedHistory);
-
+  
       const updatedKeyFeedback = { ...keyFeedback };
       newFeedback.forEach(({ letter, result }) => {
         const current = updatedKeyFeedback[letter];
@@ -93,26 +99,27 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         }
       });
       setKeyFeedback(updatedKeyFeedback);
-
+  
       if (newFeedback.every((item) => item.result === 'correct')) {
         setGameMessage(`You guessed correctly! 😊`);
         setIsGameOver(true);
         setHasWon(true);
-        if (timedMode && startTime) setTimeTaken(Math.floor((Date.now() - startTime) / 1000));
+        if (timedMode && startTime) {
+          setTimeTaken(Math.floor((Date.now() - startTime) / 1000));
+        }
       } else if (updatedHistory.length >= MAX_GUESSES) {
         setGameMessage(`No attempts left. 😞`);
         setIsGameOver(true);
       }
-
+  
       const letters = guess.split('');
       setUsedLetters(usedLetters.concat(letters));
       setGuess('');
     } catch (error) {
       console.error('Error while sending guess:', error);
-      setGameMessage('An error occurred while submitting your guess');
+      setGameMessage(error.message || 'An error occurred while submitting your guess');
     }
   }
-
   async function handleHighscoreSubmit() {
     if (!playerName) {
       setGameMessage('You must enter a name!');
@@ -120,7 +127,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/game/finish`, {
+      const response = await fetch(`/api/game/finish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
