@@ -31,3 +31,27 @@ The game gives real-time feedback on every guessed letter, includes a highscore 
 ## Source Code
 
 The full source code is available on [GitHub](https://github.com/JohnnyAstrom/wordle-fullstack).
+
+---
+
+## First time you open to project:
+
+#### 1: Clone project
+git clone https://github.com/JohnnyAstrom/Wordle-Fullstack.git
+
+#### 2: Install backend dependencies
+cd Wordle-Fullstack/backend
+npm install
+
+#### 3: Build frontend (React)
+cd ../frontend
+npm install
+npm run build
+
+#### 4: Start the server (Express)
+npm start
+
+#### Optional: Run tests
+npm test (from backend/ folder)
+
+---
