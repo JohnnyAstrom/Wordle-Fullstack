@@ -37,21 +37,21 @@ The full source code is available on [GitHub](https://github.com/JohnnyAstrom/wo
 ## First time you open to project:
 
 #### 1: Clone project
-git clone https://github.com/JohnnyAstrom/Wordle-Fullstack.git
+- git clone https://github.com/JohnnyAstrom/Wordle-Fullstack.git
 
 #### 2: Install backend dependencies
-cd Wordle-Fullstack/backend
-npm install
+- cd Wordle-Fullstack/backend
+- npm install
 
 #### 3: Build frontend (React)
-cd ../frontend
-npm install
-npm run build
+- cd ../frontend
+- npm install
+- npm run build
 
 #### 4: Start the server (Express)
-npm start
+- npm start
 
 #### Optional: Run tests
-npm test (from backend/ folder)
+- npm test (from backend/ folder)
 
 ---
