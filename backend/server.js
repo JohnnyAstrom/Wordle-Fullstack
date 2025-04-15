@@ -1,7 +1,9 @@
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
-import gameRouter from './routes/game.js';
-import highscoreRouter from './routes/highscores.js';
+import createGameRouter from './routes/game.js';
+import createHighscoreRouter from './routes/highscores.js';
+import { saveHighscore } from './logic/saveHighscore.js';
+import { getDb } from './db.js';
 import cors from 'cors';
 import path from 'path';
 
@@ -16,8 +18,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 app.set('layout', 'layout');
 
-app.use('/api/game', gameRouter);
-app.use('/highscores', highscoreRouter);
+app.use('/api/game', createGameRouter(saveHighscore));
+app.use('/highscores', createHighscoreRouter(async () => {
+  const db = await getDb();
+  return await db.collection('highscores').find({}).toArray();
+}));
 
 const publicPath = path.resolve('../frontend/dist');
 app.use(express.static(publicPath));

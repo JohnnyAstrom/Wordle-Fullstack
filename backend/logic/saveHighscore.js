@@ -1,16 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import { getDb } from '../db.js';
 
-const defaultPath = path.resolve('./data/highscores.json');
-
-export function saveHighscore(
+export async function saveHighscore(
   name,
   wordLength,
   attempts,
   uniqueOnly,
   time,
-  filePath = defaultPath,
-  timedMode = false
+  timedMode = false,
+  insertFn = null
 ) {
   const entry = {
     name,
@@ -22,16 +19,13 @@ export function saveHighscore(
     date: new Date().toISOString()
   };
 
-  let existing = [];
-
-  if (fs.existsSync(filePath)) {
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    existing = JSON.parse(fileContent);
+  if (insertFn) {
+    await insertFn(entry);
+  } else {
+    const db = await getDb();
+    const collection = db.collection('highscores');
+    await collection.insertOne(entry);
   }
-
-  existing.push(entry);
-
-  fs.writeFileSync(filePath, JSON.stringify(existing, null, 2));
 
   return entry;
 }

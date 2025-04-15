@@ -1,34 +1,43 @@
 import express from 'express';
-import path from 'path';
-import { getHighscores } from '../logic/getHighscores.js';
+import { getDb } from '../db.js';
 import { filterAndSort, buildSortLink } from '../logic/filterAndSortHighscores.js';
 
-const router = express.Router();
+export default function createHighscoreRouter(getHighscoresFn = null) {
+  const router = express.Router();
 
-// GET /api/highscores
-router.get('/', (req, res) => {
-  const filePath = req.query.useTestData === 'true'
-    ? path.resolve('./data/test-highscores.json')
-    : path.resolve('./data/highscores.json');
+  router.get('/', async (req, res) => {
+    try {
+      let highscores;
 
-  const highscores = getHighscores(filePath);
-  const filteredHighscores = filterAndSort(highscores, req.query);
+      if (getHighscoresFn) {
+        highscores = await getHighscoresFn();
+      } else {
+        const db = await getDb();
+        const collection = db.collection('highscores');
+        highscores = await collection.find({}).toArray();
+      }
 
-  // Paginering
-  const pageSize = 10;
-  const currentPage = Number(req.query.page) || 1;
-  const totalPages = Math.ceil(filteredHighscores.length / pageSize);
+      const filteredHighscores = filterAndSort(highscores, req.query);
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const paginatedHighscores = filteredHighscores.slice(startIndex, startIndex + pageSize);
+      const pageSize = 10;
+      const currentPage = Number(req.query.page) || 1;
+      const totalPages = Math.ceil(filteredHighscores.length / pageSize);
+      const startIndex = (currentPage - 1) * pageSize;
+      const paginatedHighscores = filteredHighscores.slice(startIndex, startIndex + pageSize);
 
-  res.render('highscores', {
-    highscores: paginatedHighscores,
-    query: req.query,
-    currentPage,
-    totalPages,
-    getSortLink: buildSortLink
+      res.render('highscores', {
+        highscores: paginatedHighscores,
+        query: req.query,
+        currentPage,
+        totalPages,
+        getSortLink: buildSortLink
+      });
+
+    } catch (err) {
+      console.error('Fel vid hämtning av highscores:', err);
+      res.status(500).send('Något gick fel vid databasanslutning.');
+    }
   });
-});
 
-export default router;
+  return router;
+}

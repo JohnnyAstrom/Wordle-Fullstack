@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
+// Import custom components and styling
 import GameSetup from "../components/GameSetup.jsx";
 import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
 import './Home.css';
 
 function Home({ wordLength, uniqueOnly, timedMode }) {
+  // State variables for different parts of the game
   const [guess, setGuess] = useState('');
   const [guessHistory, setGuessHistory] = useState([]);
   const [gameMessage, setGameMessage] = useState('');
@@ -19,8 +22,9 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
   const [gameId, setGameId] = useState(null);
   const [correctWord, setCorrectWord] = useState(null);
 
-  const MAX_GUESSES = 6;
+  const MAX_GUESSES = 6; // Maximum number of allowed guesses
 
+  // Start a new game by asking the backend for a word
   async function fetchWord() {
     try {
       const response = await fetch(`/api/game/start`, {
@@ -32,6 +36,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not start new game');
 
+      // Reset all game state
       setGameId(data.gameId);
       setGuess('');
       setGuessHistory([]);
@@ -42,11 +47,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       setIsSubmitted(false);
       setIsGameOver(false);
       setHasWon(false);
-      if (timedMode) {
-        setStartTime(Date.now());
-      } else {
-        setStartTime(null);
-      }
+      setStartTime(timedMode ? Date.now() : null);
       setTimeTaken(null);
     } catch (error) {
       console.error('Could not start new game:', error);
@@ -54,9 +55,12 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
   }
 
+  // Handle when the user submits a guess
   async function handleGuess() {
+    // Stop if game is over, or guess is empty or wrong length
     if (isGameOver || !guess || guess.length !== wordLength) return;
 
+    // Stop if the user already made the maximum number of guesses
     if (guessHistory.length >= MAX_GUESSES) {
       setGameMessage(`You have reached the maximum number of guesses (${MAX_GUESSES}).`);
       setIsGameOver(true);
@@ -64,54 +68,57 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
 
     try {
+      // Send the guess to the backend
       const response = await fetch(`/api/game/guess`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          gameId,
-          guessedWord: guess
-        })
+        body: JSON.stringify({ gameId, guessedWord: guess })
       });
 
       const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Invalid guess');
 
-      if (!response.ok) {
-        throw new Error(result.error || 'Invalid guess');
-      }
-
+      // Will be shown if the user loses
       if (result.correctWord) {
-        setCorrectWord(result.correctWord);
+        setCorrectWord(result.correctWord); 
       }
 
       const newFeedback = result.feedback;
 
+      // Add the new guess to the guess history
       const newGuess = { guess, feedback: newFeedback };
       const updatedHistory = guessHistory.concat(newGuess);
       setGuessHistory(updatedHistory);
 
+      // Update the keyboard feedback (colors)
       const updatedKeyFeedback = { ...keyFeedback };
       newFeedback.forEach(({ letter, result }) => {
         const current = updatedKeyFeedback[letter];
-        if (result === 'correct' || (result === 'misplaced' && current !== 'correct')) {
-          updatedKeyFeedback[letter] = result;
-        } else if (!current) {
-          updatedKeyFeedback[letter] = result;
-        }
+
+        // Do not replace "correct" with anything else
+        if (current === 'correct') return;
+        // Do not replace "misplaced" with "wrong"
+        if (current === 'misplaced' && result === 'wrong') return;
+
+        updatedKeyFeedback[letter] = result;
       });
       setKeyFeedback(updatedKeyFeedback);
 
+      // Check if the guess was completely correct
       if (newFeedback.every((item) => item.result === 'correct')) {
         setGameMessage(`You guessed correctly! 😊`);
         setIsGameOver(true);
         setHasWon(true);
         if (timedMode && startTime) {
-          setTimeTaken(Math.floor((Date.now() - startTime) / 1000));
+          const timeInSeconds = Math.floor((Date.now() - startTime) / 1000);
+          setTimeTaken(timeInSeconds);
         }
       } else if (updatedHistory.length >= MAX_GUESSES) {
         setGameMessage(`No attempts left. 😞`);
         setIsGameOver(true);
       }
 
+      // Mark all guessed letters as "used"
       const letters = guess.split('');
       setUsedLetters(usedLetters.concat(letters));
       setGuess('');
@@ -120,6 +127,8 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
       setGameMessage(error.message || 'An error occurred while submitting your guess');
     }
   }
+
+  // Handle submitting the highscore to the backend
   async function handleHighscoreSubmit() {
     if (!playerName) {
       setGameMessage('You must enter a name!');
@@ -154,6 +163,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
   }
 
+  // Handles clicks on the custom on-screen keyboard
   const handleKeyPress = (key) => {
     if (isGameOver) return;
 
@@ -168,6 +178,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     }
   };
 
+  // Listen to physical keyboard (only when not typing in an input)
   useEffect(() => {
     const handlePhysicalKey = (e) => {
       const key = e.key.toUpperCase();
@@ -188,6 +199,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
     return () => window.removeEventListener('keydown', handlePhysicalKey);
   }, [guess, wordLength, isGameOver]);
 
+  // What gets displayed on the page
   return (
     <div className="app-container">
       <h1>Wordle Game</h1>
@@ -216,10 +228,12 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         <div className="game-message">
           <p>{gameMessage}</p>
 
+          {/* Show time if the user won and timer is enabled */}
           {hasWon && timeTaken !== null && (
             <p>Your time: {timeTaken} seconds</p>
           )}
 
+          {/* Show form to submit highscore */}
           {hasWon && !isSubmitted && (
             <form
               className="highscore-form"
@@ -240,8 +254,10 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
             </form>
           )}
 
+          {/* Message after highscore is saved */}
           {isSubmitted && hasWon && <p>Well done! Your highscore is saved.</p>}
 
+          {/* Show correct word if the player lost */}
           {!hasWon && isGameOver && correctWord && (
             <p>The correct word was: <strong>{correctWord.toUpperCase()}</strong></p>
           )}
