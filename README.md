@@ -1,8 +1,8 @@
 # About the Project
 
-This is a Wordle-inspired game built as a full-stack application using **React** and **Express**.
+This is a Wordle-inspired game built as a full-stack application using **React**, **Express** and **MongoDB**.
 
-The game gives real-time feedback on every guessed letter, includes a highscore list with filters and sorting, and offers an optional timed mode.
+The game gives real-time feedback on every guessed letter, includes a highscore list with filters and sorting, and offers an optional timed mode. All highscores are saved in a MongoDB Atlas database for better performance and scalability.
 
 ---
 
@@ -12,7 +12,8 @@ The game gives real-time feedback on every guessed letter, includes a highscore 
 - Option to play with only unique letters  
 - Option to play with timer to track how fast you solve the word  
 - Server-side word generation and feedback to prevent cheating  
-- Filterable and sortable highscore list with pagination  
+- Filterable and sortable highscore list with pagination
+- Highscores stored in MongoDB Atlas
 - Fully responsive layout for mobile and desktop  
 - Live deployment using [Render](https://wordle-fullstack-app.onrender.com/)
 
@@ -22,7 +23,8 @@ The game gives real-time feedback on every guessed letter, includes a highscore 
 
 - **Frontend:** React, Vite, React Router  
 - **Backend:** Express, Node.js  
-- **Templating:** EJS (for server-side rendered highscores)  
+- **Database:** MongoDB Atlas
+- **Templating:** EJS (for server-side rendered highscores)
 - **Styling:** CSS  
 - **Testing:** Jest
 
@@ -43,15 +45,20 @@ The full source code is available on [GitHub](https://github.com/JohnnyAstrom/wo
 - cd Wordle-Fullstack/backend
 - npm install
 
-#### 3: Build frontend (React)
+#### 3: Create a `.env` file in `/backend` folder
+
+- For testing and reviewing the app, enter this text into the .env file: `MONGODB_URI=mongodb+srv://demo:wordleTest2025@cluster0.mongodb.net/Wordle-Highscores`
+
+#### 4: Build frontend (React)
 - cd ../frontend
 - npm install
 - npm run build
 
-#### 4: Start the server (Express)
+#### 5: Start the server (Express)
 - npm start
 
 #### Optional: Run tests
 - npm test (from backend/ folder)
 
 ---
+
