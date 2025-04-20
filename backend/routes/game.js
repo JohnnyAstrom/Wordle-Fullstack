@@ -45,7 +45,7 @@ export default function createGameRouter(saveHighscoreFn) {
     });
   });
 
-  // End game and save highscore
+  // End game and save
   router.post('/finish', async (req, res) => {
     const { gameId, name, attempts, wordLength, uniqueOnly, timedMode } = req.body;
 

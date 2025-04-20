@@ -1,1 +1,0 @@
-# Wordle-spelet – Frontend

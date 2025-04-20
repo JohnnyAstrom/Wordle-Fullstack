@@ -5,9 +5,11 @@ dotenv.config();
 let client = new MongoClient(process.env.MONGODB_URI);
 
 export async function getDb() {
-  if (!client.topology?.isConnected()) {
+
+  if (client.readyState !== 1) {
     await client.connect();
   }
+
   return client.db('Wordle-Highscores');
 }
 
