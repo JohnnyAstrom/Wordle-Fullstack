@@ -9,6 +9,7 @@ export default function createHighscoreRouter(getHighscoresFn = null) {
     try {
       let highscores;
 
+      // Använd testfunktion (tester)
       if (getHighscoresFn) {
         highscores = await getHighscoresFn();
       } else {
@@ -17,14 +18,17 @@ export default function createHighscoreRouter(getHighscoresFn = null) {
         highscores = await collection.find({}).toArray();
       }
 
+      // Filtrera och sortera baserat på query-parametrar
       const filteredHighscores = filterAndSort(highscores, req.query);
 
+      // Paginering
       const pageSize = 10;
       const currentPage = Number(req.query.page) || 1;
       const totalPages = Math.ceil(filteredHighscores.length / pageSize);
       const startIndex = (currentPage - 1) * pageSize;
       const paginatedHighscores = filteredHighscores.slice(startIndex, startIndex + pageSize);
 
+      // Rendera EJS sida med highscore data
       res.render('highscores', {
         highscores: paginatedHighscores,
         query: req.query,

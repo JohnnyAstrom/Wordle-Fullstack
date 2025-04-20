@@ -18,22 +18,29 @@ export function filterAndSort(highscores, query) {
 
   if (sortBy) {
     const sortOrder = order === 'desc' ? 'desc' : 'asc';
-
+  
     filtered.sort((a, b) => {
       let aVal = a[sortBy];
       let bVal = b[sortBy];
-
+  
       if (sortBy === 'time') {
         aVal = aVal ?? Infinity;
         bVal = bVal ?? Infinity;
       }
-
+  
       if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
       if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
+  } else {
+    filtered.sort((a, b) => {
+      if (a.attempts !== b.attempts) {
+        return a.attempts - b.attempts;
+      }
+      return (a.timeInSeconds ?? Infinity) - (b.timeInSeconds ?? Infinity);
+    });
   }
-
+  
   return filtered;
 }
 
