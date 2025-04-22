@@ -9,7 +9,7 @@ export default function createHighscoreRouter(getHighscoresFn = null) {
     try {
       let highscores;
 
-      // Använd testfunktion om den finns (t.ex. vid tester), annars hämta från databasen
+      // Använd testfunktion (tester) annars hämta från D
       if (getHighscoresFn) {
         highscores = await getHighscoresFn();
       } else {

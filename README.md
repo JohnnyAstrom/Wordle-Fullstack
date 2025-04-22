@@ -50,10 +50,10 @@ The full source code is available on [GitHub](https://github.com/JohnnyAstrom/wo
 - For testing and reviewing the app, enter the following lines into the `.env` file:
 ```env
 # MongoDB URI for main gameplay
-MONGODB_URI=mongodb+srv://demo:wordleTest2025@wordle-cluster.bpa1xnt.mongodb.net/Wordle-Highscores?retryWrites=true&w=majority&appName=wordle-cluster
+MONGODB_URI=mongodb+srv://demo:wordleTest2025@dev-cluster.t0oylun.mongodb.net/?retryWrites=true&w=majority&appName=dev-cluster
 
 # MongoDB URI for test environment
-TEST_MONGODB_URI=mongodb+srv://demo:wordleTest2025@wordle-cluster.bpa1xnt.mongodb.net/wordle-test?retryWrites=true&w=majority&appName=wordle-cluster
+TEST_MONGODB_URI=mongodb+srv://demo:wordleTest2025@dev-cluster.t0oylun.mongodb.net/?retryWrites=true&w=majority&appName=dev-cluster
 ```
 
 #### 4: Build frontend (React)

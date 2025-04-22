@@ -10,7 +10,7 @@ export async function getDb() {
     await client.connect();
   }
 
-  return client.db('Wordle-Highscores');
+  return client.db('wordle');
 }
 
 export async function closeDb() {
