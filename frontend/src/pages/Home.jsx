@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import GameSetup from "../components/GameSetup.jsx";
 import CustomKeyboard from "../components/CustomKeyboard.jsx";
 import Board from "../components/Board.jsx";
+import Modal from '../components/Modal.jsx';
 import './Home.css';
 
 function Home({ wordLength, uniqueOnly, timedMode }) {
@@ -21,6 +22,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
   const [timeTaken, setTimeTaken] = useState(null);
   const [gameId, setGameId] = useState(null);
   const [correctWord, setCorrectWord] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const MAX_GUESSES = 6; // Maximum number of allowed guesses
 
@@ -80,7 +82,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
       // Will be shown if the user loses
       if (result.correctWord) {
-        setCorrectWord(result.correctWord); 
+        setCorrectWord(result.correctWord);
       }
 
       const newFeedback = result.feedback;
@@ -109,6 +111,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         setGameMessage(`You guessed correctly! 😊`);
         setIsGameOver(true);
         setHasWon(true);
+        setShowModal(true);
         if (timedMode && startTime) {
           const timeInSeconds = Math.floor((Date.now() - startTime) / 1000);
           setTimeTaken(timeInSeconds);
@@ -152,6 +155,7 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
 
       if (response.ok) {
         setIsSubmitted(true);
+        setShowModal(false);
       } else {
         const error = await response.json();
         console.error('Error saving highscore:', error);
@@ -228,41 +232,47 @@ function Home({ wordLength, uniqueOnly, timedMode }) {
         <div className="game-message">
           <p>{gameMessage}</p>
 
-          {/* Show time if the user won and timer is enabled */}
           {hasWon && timeTaken !== null && (
             <p>Your time: {timeTaken} seconds</p>
           )}
 
-          {/* Show form to submit highscore */}
-          {hasWon && !isSubmitted && (
-            <form
-              className="highscore-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleHighscoreSubmit();
-              }}
-            >
-              <div className="save-highscore-container">
-                <input
-                  type="text"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  placeholder="Your name"
-                />
-                <button className="submit-button" type="submit">Save highscore</button>
-              </div>
-            </form>
+          {isSubmitted && hasWon && (
+            <p>Well done! Your highscore is saved.</p>
           )}
 
-          {/* Message after highscore is saved */}
-          {isSubmitted && hasWon && <p>Well done! Your highscore is saved.</p>}
-
-          {/* Show correct word if the player lost */}
           {!hasWon && isGameOver && correctWord && (
             <p>The correct word was: <strong>{correctWord.toUpperCase()}</strong></p>
           )}
         </div>
       )}
+
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <h2>✔️ Correct. Well done!</h2>
+        <p>Enter your name below to save your highscore.</p>
+
+        {timedMode && timeTaken !== null && (
+          <p>Your time: {timeTaken} seconds</p>
+        )}
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleHighscoreSubmit();
+          }}
+          className="save-highscore-container"
+        >
+          <input
+            type="text"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            placeholder="Your name"
+            required
+          />
+          <button type="submit" className="submit-button">Save highscore</button>
+        </form>
+      </Modal>
+
+
     </div>
   );
 }
