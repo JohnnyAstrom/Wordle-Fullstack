@@ -1,0 +1,32 @@
+name: Keep Atlas Alive
+
+on:
+  schedule:
+    - cron: "0 */120 * * *"  # kör var 120:e timme (UTC)
+  workflow_dispatch:        # gör att du kan köra manuellt från Actions
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping MongoDB Atlas
+        run: |
+          node - <<'EOF'
+          import { MongoClient } from "mongodb";
+          const uri = process.env.MONGODB_URI;
+          const client = new MongoClient(uri, { serverSelectionTimeoutMS: 10000 });
+          (async () => {
+            try {
+              await client.connect();
+              await client.db("admin").command({ ping: 1 });
+              console.log("Ping OK");
+            } catch (err) {
+              console.error("Ping failed:", err);
+              process.exit(1);
+            } finally {
+              await client.close();
+            }
+          })();
+          EOF
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
