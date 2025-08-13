@@ -2,33 +2,27 @@ name: Keep Atlas Alive
 
 on:
   schedule:
-    - cron: "0 */129 * * *"  # var 10:e timme (UTC)
-  workflow_dispatch:        # kan köras manuellt
+    - cron: "0 6 1-31/5 * *"  # kör 06:00 UTC var 5:e dag
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Installera CJS-kompatibel driver lokalt i jobbmappen
       - name: Install MongoDB driver
-        run: npm install mongodb
+        run: |
+          npm init -y
+          npm install mongodb@5
+          npm ls mongodb || true
+
+      # Kör pingen med CommonJS (require) – INTE import
       - name: Ping MongoDB Atlas
         run: |
-          node - <<'EOF'
-          import { MongoClient } from "mongodb";
-          const uri = process.env.MONGODB_URI;
-          const client = new MongoClient(uri, { serverSelectionTimeoutMS: 10000 });
-          (async () => {
-            try {
-              await client.connect();
-              await client.db("admin").command({ ping: 1 });
-              console.log("Ping OK");
-            } catch (err) {
-              console.error("Ping failed:", err);
-              process.exit(1);
-            } finally {
-              await client.close();
-            }
-          })();
-          EOF
+          node -e "const { MongoClient } = require('mongodb'); const uri = process.env.MONGODB_URI; if(!uri){console.error('Missing MONGODB_URI'); process.exit(1)} const client = new MongoClient(uri,{serverSelectionTimeoutMS:10000}); (async()=>{try{await client.connect(); await client.db('admin').command({ping:1}); console.log('Ping OK')}catch(e){console.error('Ping failed:', e); process.exit(1)}finally{await client.close()}})()"
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
